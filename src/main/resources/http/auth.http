@@ -1,0 +1,21 @@
+###register
+POST localhost:8080/auth/registration
+Content-Type: application/json
+
+{
+  "name": "Eshmat",
+  "surname": "Eshmatov",
+  "username": "aaaaa",
+  "password": "11111"
+}
+
+###register
+POST localhost:8080/auth/registration
+Content-Type: application/json
+
+{
+  "name": " ",
+  "surname": "Eshmatov",
+  "username": "aaaaa",
+  "password": "1"
+}
