@@ -1,0 +1,25 @@
+package top.news.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import top.news.enums.ProfileRoles;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "profile_role")
+public class ProfileRole {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "profile_id")
+    private Integer profileId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
+    private Profile profile;
+
+    @Enumerated(EnumType.STRING)
+    private ProfileRoles role;
+}
