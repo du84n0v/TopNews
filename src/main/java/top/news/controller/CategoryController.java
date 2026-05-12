@@ -43,6 +43,4 @@ public class CategoryController {
     public ResponseEntity<List<CategoryByLangDTO>> byLang(@RequestHeader(value = "Accept-Language", defaultValue = "uz") String lang){
         return ResponseEntity.ok(categoryService.getCategoriesByLang(lang));
     }
-
-
 }
