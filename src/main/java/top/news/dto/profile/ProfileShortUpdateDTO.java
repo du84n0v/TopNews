@@ -1,4 +1,4 @@
-package top.news.dto;
+package top.news.dto.profile;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

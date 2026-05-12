@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
-import top.news.dto.ProfileFilterDTO;
+import top.news.dto.profile.ProfileFilterDTO;
 import top.news.entity.Profile;
-import top.news.enums.ProfileRoles;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

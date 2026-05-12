@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import top.news.dto.ProfileDTO;
-import top.news.dto.ProfileFilterDTO;
-import top.news.dto.ProfileInfoDTO;
-import top.news.dto.ProfileShortUpdateDTO;
+import top.news.dto.profile.ProfileDTO;
+import top.news.dto.profile.ProfileFilterDTO;
+import top.news.dto.profile.ProfileInfoDTO;
+import top.news.dto.profile.ProfileShortUpdateDTO;
 import top.news.entity.Profile;
-import top.news.entity.ProfileRole;
 import top.news.enums.ProfileRoles;
 import top.news.exception.ItemNotFoundException;
 import top.news.repository.ProfileRepository;
@@ -113,5 +111,14 @@ public class ProfileService {
                 .map(profile -> entityToInfoDTO(profile, profileRoleService.getProfileRolesById(profile.getId())))
                 .toList();
         return new PageImpl<>(response, PageRequest.of(page, size), profiles.getTotalElements());
+    }
+
+    public String deleteByProfileId(Integer profileId) {
+        if(profileRepository.findByIdAndVisibleTrue(profileId).isEmpty()){
+            throw new ItemNotFoundException("Profile is not found");
+        }
+        int result = profileRepository.updateVisible(profileId);
+
+        return (result > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 }

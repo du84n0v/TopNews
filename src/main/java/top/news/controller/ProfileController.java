@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.news.dto.ProfileDTO;
-import top.news.dto.ProfileFilterDTO;
-import top.news.dto.ProfileInfoDTO;
+import top.news.dto.profile.ProfileDTO;
+import top.news.dto.profile.ProfileFilterDTO;
+import top.news.dto.profile.ProfileInfoDTO;
 import top.news.service.ProfileService;
 
 @RestController
@@ -24,6 +24,11 @@ public class ProfileController {
     @GetMapping("/by-id/{profileId}")
     public ResponseEntity<ProfileDTO> byId(@PathVariable Integer profileId){
         return ResponseEntity.ok(profileService.getById(profileId));
+    }
+
+    @DeleteMapping("by-id/{profileId}")
+    public ResponseEntity<String> delete(@PathVariable Integer profileId){
+        return ResponseEntity.ok(profileService.deleteByProfileId(profileId));
     }
 
     @GetMapping("/list")

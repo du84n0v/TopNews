@@ -1,19 +1,19 @@
-package top.news.dto;
+package top.news.dto.profile;
 
 import lombok.Getter;
 import lombok.Setter;
 import top.news.enums.ProfileRoles;
+import top.news.enums.ProfileStatus;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
-public class ProfileFilterDTO {
+public class ProfileDTO {
     private String name;
     private String surname;
     private String username;
+    private String password;
     private List<ProfileRoles> roleList;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    private ProfileStatus status;
 }
