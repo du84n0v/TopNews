@@ -4,7 +4,11 @@ import org.springframework.data.repository.CrudRepository;
 import top.news.entity.ProfileRole;
 import top.news.enums.ProfileRoles;
 
+import java.util.List;
+
 public interface ProfileRoleRepository extends CrudRepository<ProfileRole, Integer> {
 
-    boolean existsByIdAndRole(Integer profileId, ProfileRoles profileRole);
+    boolean existsByProfileIdAndRole(Integer profileId, ProfileRoles role);
+
+    List<ProfileRole> findAllByProfileId(Integer profileId);
 }

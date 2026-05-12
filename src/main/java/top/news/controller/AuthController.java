@@ -3,12 +3,11 @@ package top.news.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.news.dto.AuthDTO;
+import top.news.dto.ProfileShortUpdateDTO;
 import top.news.service.AuthService;
+import top.news.service.ProfileService;
 
 @RestController
 @RequestMapping("auth")
@@ -16,9 +15,17 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    @Autowired
+    private ProfileService profileService;
 
     @PostMapping("/registration")
     private ResponseEntity<String> register(@Valid @RequestBody AuthDTO dto){
         return ResponseEntity.ok(authService.register(dto));
+    }
+
+    @PutMapping("/update/{profileId}")
+    public ResponseEntity<String> update(@PathVariable Integer profileId,
+                                         @Valid @RequestBody ProfileShortUpdateDTO dto){
+        return ResponseEntity.ok(profileService.updateProfileById(profileId, dto));
     }
 }
