@@ -1,0 +1,46 @@
+package top.news.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import top.news.dto.region.RegionByLangDTO;
+import top.news.dto.region.RegionDTO;
+import top.news.entity.Region;
+import top.news.service.RegionService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/region")
+public class RegionController {
+
+    @Autowired
+    private RegionService regionService;
+
+    @PostMapping("/create")
+    public ResponseEntity<String> create(@Valid @RequestBody RegionDTO dto){
+        return ResponseEntity.ok(regionService.saveRegion(dto));
+    }
+
+    @PutMapping("update-by-id{regionId}")
+    public ResponseEntity<String> update(@PathVariable Integer regionId,
+                                         @Valid @RequestBody RegionDTO dto){
+        return ResponseEntity.ok(regionService.updateById(regionId, dto));
+    }
+
+    @PutMapping("delete-by-id/{regionId}")
+    public ResponseEntity<String> delete(@PathVariable Integer regionId){
+        return ResponseEntity.ok(regionService.deleteRegion(regionId));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Region>> list(){
+        return ResponseEntity.ok(regionService.getList());
+    }
+
+    @GetMapping("/by-lang")
+    public ResponseEntity<List<RegionByLangDTO>> byLang(@RequestHeader(value = "Accept-Language", defaultValue = "uz") String lang){
+        return ResponseEntity.ok(regionService.getRegionByLang(lang));
+    }
+}
