@@ -1,0 +1,12 @@
+###create profile
+POST localhost:8080/profile/create
+Content-Type: application/json
+
+{
+    "name": "Eshmat",
+    "surname": "Toshmatov",
+    "username": "eshmat_jurnalist@topnews.uz",
+    "password": "moderatorPassword777",
+    "roleList": ["MODERATOR", "USER"],
+    "status": "ACTIVE"
+}
