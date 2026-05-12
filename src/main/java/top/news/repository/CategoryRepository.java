@@ -16,4 +16,6 @@ public interface CategoryRepository extends CrudRepository<Category , Integer> {
     @Modifying
     @Query("UPDATE Category c SET c.visible=false WHERE c.id =?1")
     int delete(Integer categoryId);
+
+    Iterable<Category> findAllByVisibleTrue();
 }
