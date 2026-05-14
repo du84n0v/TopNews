@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.news.dto.AuthDTO;
 import top.news.entity.Profile;
-import top.news.enums.ProfileStatus;
+import top.news.enums.ProfileStatusEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.repository.ProfileRepository;
 import top.news.util.MD5Encode;
@@ -29,7 +29,7 @@ public class AuthService {
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
         profile.setPassword(MD5Encode.encode(dto.getPassword()));
-        profile.setStatus(ProfileStatus.ACTIVE);
+        profile.setStatus(ProfileStatusEnum.ACTIVE);
         profile.setVisible(true);
         profile.setCreatedDate(LocalDateTime.now());
 

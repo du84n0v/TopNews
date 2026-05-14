@@ -1,5 +1,5 @@
 package top.news.enums;
 
-public enum ProfileStatus {
+public enum ProfileStatusEnum {
     ACTIVE, NOT_ACTIVE, BLOCKED
 }

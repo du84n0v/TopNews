@@ -5,12 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import top.news.dto.profile.ProfileDTO;
 import top.news.dto.profile.ProfileFilterDTO;
-import top.news.dto.profile.ProfileInfoDTO;
-import top.news.dto.profile.ProfileShortUpdateDTO;
+import top.news.dto.profile.ProfileRequestDTO;
+import top.news.dto.profile.ProfileResponseDTO;
+import top.news.dto.profile.ProfileDetailUpdateDTO;
 import top.news.entity.Profile;
-import top.news.enums.ProfileRoles;
+import top.news.enums.ProfileRoleEnum;
+import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
 import top.news.repository.ProfileRepository;
 import top.news.repository.custom.ProfileCustomRepository;
@@ -29,57 +30,57 @@ public class ProfileService {
     @Autowired
     private ProfileCustomRepository profileCustomRepository;
 
-    public ProfileInfoDTO save(ProfileDTO dto) {
+    public ProfileResponseDTO save(ProfileRequestDTO dto) {
+        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
+        if(optional.isPresent()){
+            throw new AppBadRequestException("User exists");
+        }
         Profile profile = new Profile();
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
-        profile.setPassword(dto.getPassword());
         profile.setStatus(dto.getStatus());
-        profile.setVisible(true);
+        profile.setVisible(Boolean.TRUE);
         profile.setCreatedDate(LocalDateTime.now());
 
         profileRepository.save(profile);
 
-        for (ProfileRoles profileRoles : dto.getRoleList()) {
-            profileRoleService.save(profile.getId(), profileRoles);
-        }
+        profileRoleService.merge(profile.getId(), dto.getRoleList());
 
-        return entityToInfoDTO(profile, dto.getRoleList());
+        return toResponseDTO(profile, dto.getRoleList());
     }
 
-    public ProfileInfoDTO entityToInfoDTO(Profile profile, List<ProfileRoles> roles){
-        ProfileInfoDTO response = new ProfileInfoDTO();
-        response.setId(profile.getId());
-        response.setName(profile.getName());
-        response.setSurname(profile.getSurname());
-        response.setUsername(profile.getUsername());
-        response.setRoleList(roles);
-        response.setStatus(profile.getStatus());
-        response.setCreatedDate(profile.getCreatedDate());
-        response.setPhotoId(profile.getPhotoId());
+    public ProfileResponseDTO toResponseDTO(Profile profile, List<ProfileRoleEnum> roles){
+        ProfileResponseDTO response = new ProfileResponseDTO();
+        if(profile.getId() != null) response.setId(profile.getId());
+        if(profile.getName() != null) response.setName(profile.getName());
+        if(profile.getSurname() != null) response.setSurname(profile.getSurname());
+        if(profile.getUsername() != null) response.setUsername(profile.getUsername());
+        if(profile.getRoles() != null && !profile.getRoles().isEmpty()) response.setRoleList(roles);
+        if(profile.getStatus() != null) response.setStatus(profile.getStatus());
+        if(profile.getCreatedDate() != null) response.setCreatedDate(profile.getCreatedDate());
+        if(profile.getPhotoId() != null) response.setPhotoId(profile.getPhotoId());
 
         return response;
     }
 
-    public ProfileDTO getById(Integer profileId) {
+    public ProfileResponseDTO getById(Integer profileId) {
         Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
             throw new ItemNotFoundException("Profile not found");
         }
         Profile profile = optional.get();
-        ProfileDTO response = new ProfileDTO();
+        ProfileResponseDTO response = new ProfileResponseDTO();
         response.setName(profile.getName());
         response.setSurname(profile.getSurname());
         response.setUsername(profile.getUsername());
-        response.setPassword(profile.getPassword());
         response.setStatus(profile.getStatus());
         response.setRoleList(new LinkedList<>(profileRoleService.getProfileRolesById(profileId)));
 
         return response;
     }
 
-    public String updateProfileById(Integer profileId, ProfileShortUpdateDTO dto) {
+    public String updateProfileById(Integer profileId, ProfileDetailUpdateDTO dto) {
         Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
             throw new ItemNotFoundException("Profile is not found");
@@ -93,22 +94,22 @@ public class ProfileService {
         return "Successfully updated";
     }
 
-    public PageImpl<ProfileInfoDTO> getProfileList(Integer page, Integer size) {
+    public PageImpl<ProfileResponseDTO> getProfileList(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Profile> pages = profileRepository.findAllByVisibleTrue(pageRequest);
 
-        List<ProfileInfoDTO> response = pages.stream()
-                .map(p -> entityToInfoDTO(p, profileRoleService.getProfileRolesById(p.getId())))
+        List<ProfileResponseDTO> response = pages.stream()
+                .map(p -> toResponseDTO(p, profileRoleService.getProfileRolesById(p.getId())))
                 .toList();
         return new PageImpl<>(response, pageRequest, pages.getTotalElements());
     }
 
-    public PageImpl<ProfileInfoDTO> studentFilter(ProfileFilterDTO dto, Integer page, Integer size) {
+    public PageImpl<ProfileResponseDTO> studentFilter(ProfileFilterDTO dto, Integer page, Integer size) {
         PageImpl<Profile> profiles = profileCustomRepository.filter(dto, page, size);
 
 
-        List<ProfileInfoDTO> response = profiles.stream()
-                .map(profile -> entityToInfoDTO(profile, profileRoleService.getProfileRolesById(profile.getId())))
+        List<ProfileResponseDTO> response = profiles.stream()
+                .map(profile -> toResponseDTO(profile, profileRoleService.getProfileRolesById(profile.getId())))
                 .toList();
         return new PageImpl<>(response, PageRequest.of(page, size), profiles.getTotalElements());
     }
@@ -120,5 +121,27 @@ public class ProfileService {
         int result = profileRepository.updateVisible(profileId);
 
         return (result > 0 ? "Successfully deleted" : "Hmm something went wrong");
+    }
+
+    public ProfileResponseDTO updateProfile(Integer profileId, ProfileRequestDTO dto) {
+        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        if(optional.isEmpty()){
+            throw new ItemNotFoundException("Profile not found");
+        }
+        Optional<Profile> usernameOptional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
+        if(usernameOptional.isPresent() && !profileId.equals(usernameOptional.get().getId())){
+            throw new AppBadRequestException("Username belong to other user");
+        }
+        Profile profile = optional.get();
+        profile.setName(dto.getName());
+        profile.setSurname(dto.getSurname());
+        profile.setUsername(dto.getUsername());
+        profile.setStatus(dto.getStatus());
+
+        profileRepository.save(profile);
+
+        profileRoleService.merge(profileId, dto.getRoleList());
+
+        return toResponseDTO(profile, dto.getRoleList());
     }
 }

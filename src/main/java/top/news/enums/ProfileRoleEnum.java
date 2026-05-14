@@ -1,6 +1,6 @@
 package top.news.enums;
 
-public enum ProfileRoles {
+public enum ProfileRoleEnum {
     USER,
     ADMIN,
     MODERATOR,

@@ -3,9 +3,10 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import top.news.enums.ProfileStatus;
+import top.news.enums.ProfileStatusEnum;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,20 +16,32 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column
+
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column
+
+    @Column(name = "surname", nullable = false)
     private String surname;
+
     @Column(unique = true, nullable = false)
     private String username;
-    @Column
+
+    @Column(name = "password", nullable = false)
     private String password;
+
     @Enumerated(EnumType.STRING)
-    private ProfileStatus status;
-    @Column
+    @Column(name = "status", nullable = false)
+    private ProfileStatusEnum status;
+
+    @Column(name = "visible", nullable = false)
     private Boolean visible;
-    @Column(name = "created_date")
+
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
+
     @Column(name = "photo_id")
     private Integer photoId;
+
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+    List<ProfileRole> roles;
 }

@@ -2,13 +2,11 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.news.entity.Profile;
 import top.news.entity.ProfileRole;
-import top.news.enums.ProfileRoles;
+import top.news.enums.ProfileRoleEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.repository.ProfileRoleRepository;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -17,7 +15,7 @@ public class ProfileRoleService {
     @Autowired
     private ProfileRoleRepository profileRoleRepository;
 
-    public void save(Integer profileId, ProfileRoles role) {
+    public void save(Integer profileId, ProfileRoleEnum role) {
         if(profileRoleRepository.existsByProfileIdAndRole(profileId, role)){
             throw new AppBadRequestException("This role is already assigned to this profile");
         }
@@ -29,10 +27,28 @@ public class ProfileRoleService {
         profileRoleRepository.save(profileRole);
     }
 
-    public List<ProfileRoles> getProfileRolesById(Integer profileId) {
+    public List<ProfileRoleEnum> getProfileRolesById(Integer profileId) {
         return profileRoleRepository.findAllByProfileId(profileId).stream()
                 .map(ProfileRole::getRole)
                 .toList();
 
+    }
+
+    public void merge(Integer profileId, List<ProfileRoleEnum> roleList) {
+        deleteProfileRoles(profileId);
+
+        List<ProfileRole> roles = roleList.stream()
+                .map(role -> {
+                    ProfileRole profileRole = new ProfileRole();
+                    profileRole.setProfileId(profileId);
+                    profileRole.setRole(role);
+                    return profileRole;
+                }).toList();
+
+        profileRoleRepository.saveAll(roles);
+    }
+
+    private void deleteProfileRoles(Integer profileId) {
+        profileRoleRepository.deleteByProfileId(profileId);
     }
 }

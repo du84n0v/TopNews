@@ -1,22 +1,32 @@
 package top.news.dto.profile;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
-import top.news.enums.ProfileRoles;
-import top.news.enums.ProfileStatus;
+import top.news.enums.ProfileRoleEnum;
+import top.news.enums.ProfileStatusEnum;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
-public class ProfileInfoDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ProfileResponseDTO {
+
     private Integer id;
+
     private String name;
+
     private String surname;
+
     private String username;
-    private List<ProfileRoles> roleList;
-    private ProfileStatus status;
+
+    private List<ProfileRoleEnum> roleList;
+
+    private ProfileStatusEnum status;
+
     private LocalDateTime createdDate;
+
     private Integer photoId;
 }

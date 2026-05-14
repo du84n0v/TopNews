@@ -3,7 +3,7 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import top.news.enums.ProfileRoles;
+import top.news.enums.ProfileRoleEnum;
 
 @Getter
 @Setter
@@ -17,9 +17,9 @@ public class ProfileRole {
     @Column(name = "profile_id")
     private Integer profileId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", insertable = false, updatable = false)
+    @JoinColumn(name = "profile_id", insertable = false, updatable = false, nullable = false)
     private Profile profile;
 
     @Enumerated(EnumType.STRING)
-    private ProfileRoles role;
+    private ProfileRoleEnum role;
 }
