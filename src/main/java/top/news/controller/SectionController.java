@@ -4,9 +4,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.news.dto.section.SectionByLangDTO;
-import top.news.dto.section.SectionDTO;
+import top.news.dto.section.SectionRequestDTO;
+import top.news.dto.section.SectionResponseDTO;
 import top.news.entity.Section;
+import top.news.enums.AppLanguage;
 import top.news.service.SectionService;
 
 import java.util.List;
@@ -19,13 +20,13 @@ public class SectionController {
     private SectionService sectionService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@Valid @RequestBody SectionDTO dto){
+    public ResponseEntity<String> create(@Valid @RequestBody SectionRequestDTO dto){
         return ResponseEntity.ok(sectionService.createSection(dto));
     }
 
     @PutMapping("/update-by-id/{sectionId}")
     public ResponseEntity<String> updateById(@PathVariable Integer sectionId,
-                                             @RequestBody SectionDTO dto){
+                                             @RequestBody SectionRequestDTO dto){
         return ResponseEntity.ok(sectionService.updateSectionById(sectionId, dto));
     }
 
@@ -40,7 +41,7 @@ public class SectionController {
     }
 
     @GetMapping("/by-lang")
-    public ResponseEntity<List<SectionByLangDTO>> byLang(@RequestHeader(value = "Accept-Language", defaultValue = "uz") String lang){
+    public ResponseEntity<List<SectionResponseDTO>> byLang(@RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage lang){
         return ResponseEntity.ok(sectionService.getSectionsByLang(lang));
     }
 }

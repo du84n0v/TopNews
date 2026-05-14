@@ -1,6 +1,6 @@
 package top.news.mapper;
 
-public interface CategoryLangMapper {
+public interface SectionMapper {
     Integer getId();
     String getKey();
     String getName();

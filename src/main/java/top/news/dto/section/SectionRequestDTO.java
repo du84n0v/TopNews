@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SectionDTO {
+public class SectionRequestDTO {
     @NotNull
     private Integer orderNumber;
     @NotBlank

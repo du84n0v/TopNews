@@ -1,0 +1,57 @@
+###create Section
+POST http://localhost:8080/section/create
+Content-Type: application/json
+
+{
+  "nameUz": "Asosiy",
+  "nameRu": "Главная",
+  "nameEn": "Main",
+  "key": "main",
+  "orderNumber": 1
+}
+
+###create Section
+POST http://localhost:8080/section/create
+Content-Type: application/json
+
+{
+  "nameUz": "Dolzarb",
+  "nameRu": "Актуальное",
+  "nameEn": "Actual",
+  "key": "actual",
+  "orderNumber": 2
+}
+
+###create Section
+POST http://localhost:8080/section/create
+Content-Type: application/json
+
+{
+  "nameUz": "Muharrir tanlovi",
+  "nameRu": "Выбор редактора",
+  "nameEn": "Editor's choice",
+  "key": "editors-choice",
+  "orderNumber": 3
+}
+
+###get Section list
+GET http://localhost:8080/section/list
+
+###update Section
+PUT http://localhost:8080/section/update-by-id/3
+Content-Type: application/json
+
+{
+  "nameUz": "Foto yangilik",
+  "nameRu": "Фото новости",
+  "nameEn": "Photo news",
+  "key": "photo-news",
+  "orderNumber": 1
+}
+
+###delet Section
+PUT http://localhost:8080/section/detele-by-id/3
+
+###get by lang
+GET http://localhost:8080/section/by-lang
+Accept-Language: UZ

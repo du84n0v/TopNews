@@ -8,7 +8,7 @@ import top.news.entity.Category;
 import top.news.enums.AppLanguage;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
-import top.news.mapper.CategoryLangMapper;
+import top.news.mapper.CategoryMapper;
 import top.news.repository.CategoryRepository;
 
 import java.time.LocalDateTime;
@@ -86,9 +86,9 @@ public class CategoryService {
     }
 
     public List<CategoryResponseDTO> getCategoriesByLang(AppLanguage lang) {
-        List<CategoryLangMapper> mappers = categoryRepository.findByLang(lang.name());
+        List<CategoryMapper> mappers = categoryRepository.findByLang(lang.name());
         List<CategoryResponseDTO> response = new LinkedList<>();
-        for (CategoryLangMapper mapper : mappers) {
+        for (CategoryMapper mapper : mappers) {
             CategoryResponseDTO dto = new CategoryResponseDTO();
             dto.setId(mapper.getId());
             dto.setKey(mapper.getKey());

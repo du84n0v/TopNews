@@ -2,10 +2,13 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.news.dto.section.SectionByLangDTO;
-import top.news.dto.section.SectionDTO;
+import top.news.dto.section.SectionRequestDTO;
+import top.news.dto.section.SectionResponseDTO;
 import top.news.entity.Section;
+import top.news.enums.AppLanguage;
+import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
+import top.news.mapper.SectionMapper;
 import top.news.repository.SectionRepository;
 
 import java.time.LocalDateTime;
@@ -19,9 +22,13 @@ public class SectionService {
     @Autowired
     private SectionRepository sectionRepository;
 
-    public String createSection(SectionDTO dto) {
+    public String createSection(SectionRequestDTO dto) {
+        Optional<Section> optional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        if(optional.isPresent()){
+            throw new AppBadRequestException("Section key already exists");
+        }
         Section section = save(dto);
-        section.setVisible(true);
+        section.setVisible(Boolean.TRUE);
         section.setCreatedDate(LocalDateTime.now());
 
         sectionRepository.save(section);
@@ -29,7 +36,7 @@ public class SectionService {
         return "Successfully created";
     }
 
-    private Section save(SectionDTO dto) {
+    private Section save(SectionRequestDTO dto) {
         Section section = new Section();
         section.setOrderNumber(dto.getOrderNumber());
         section.setNameUz(dto.getNameUz());
@@ -39,13 +46,19 @@ public class SectionService {
         return section;
     }
 
-    public String updateSectionById(Integer sectionId, SectionDTO dto) {
+    public String updateSectionById(Integer sectionId, SectionRequestDTO dto) {
         Optional<Section> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Category is not found");
+            throw new ItemNotFoundException("Category not found");
+        }
+        Optional<Section> keyOptional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        if(keyOptional.isPresent() && !sectionId.equals(keyOptional.get().getId())){
+            throw new AppBadRequestException("Section key belong to other section");
         }
         Section section = save(dto);
-
+        section.setId(sectionId);
+        section.setVisible(Boolean.TRUE);
+        section.setCreatedDate(optional.get().getCreatedDate());
         sectionRepository.save(section);
 
         return "Successfully updated";
@@ -56,10 +69,7 @@ public class SectionService {
         if(optional.isEmpty()){
             throw new ItemNotFoundException("Category is not found");
         }
-
-        int result = sectionRepository.delete(sectionId);
-
-        return (result > 0 ? "Successfully deleted" : "Hmm something went wrong");
+        return (sectionRepository.delete(sectionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
     public List<Section> getSectionList() {
@@ -72,24 +82,16 @@ public class SectionService {
         return response;
     }
 
-    public List<SectionByLangDTO> getSectionsByLang(String lang) {
-        Iterable<Section> sections = sectionRepository.findAllByVisibleTrue();
-
-        List<SectionByLangDTO> response = new LinkedList<>();
-        for (Section section : sections) {
-            SectionByLangDTO current = new SectionByLangDTO();
-            current.setId(section.getId());
-            current.setKey(section.getKey());
-
-            switch(lang){
-                case "uz" -> current.setName(section.getNameUz());
-                case "ru" -> current.setName(section.getNameRu());
-                case "en" -> current.setName(section.getNameEn());
-            }
-
-            response.add(current);
+    public List<SectionResponseDTO> getSectionsByLang(AppLanguage lang) {
+        List<SectionMapper> mappers = sectionRepository.getByLang(lang.name());
+        List<SectionResponseDTO> response = new LinkedList<>();
+        for (SectionMapper mapper : mappers) {
+            SectionResponseDTO dto = new SectionResponseDTO();
+            dto.setId(mapper.getId());
+            dto.setKey(mapper.getKey());
+            dto.setName(mapper.getName());
+            response.add(dto);
         }
-
         return response;
     }
 

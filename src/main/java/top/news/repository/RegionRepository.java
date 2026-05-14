@@ -24,12 +24,12 @@ public interface RegionRepository extends CrudRepository<Region, Integer> {
 
     Optional<Region> findByKeyAndVisibleTrue(String key);
 
-    @Query("SELECT r.id AS id, r.key AS key," +
+    @Query("SELECT r.id AS id, r.key AS key, " +
             " CASE :lang " +
-            " WHEN 'UZ' THEN r.nameUz " +
-            " WHEN 'RU' THEN r.nameRu " +
-            " WHEN 'EN' THEN r.nameEn " +
-            "END AS name " +
+            "   WHEN 'UZ' THEN r.nameUz " +
+            "   WHEN 'RU' THEN r.nameRu " +
+            "   WHEN 'EN' THEN r.nameEn " +
+            " END AS name " +
             " FROM Region r " +
             " WHERE r.visible=true ORDER BY r.orderNumber ASC")
     List<RegionMapper> findAllByLang(@Param(("lang")) String lang);

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import top.news.entity.Category;
-import top.news.mapper.CategoryLangMapper;
+import top.news.mapper.CategoryMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +32,5 @@ public interface CategoryRepository extends CrudRepository<Category , Integer> {
             "END AS name " +
             " FROM Category c " +
             " WHERE c.visible=true ORDER BY c.orderNumber ASC")
-    List<CategoryLangMapper> findByLang(@Param("lang") String lang);
+    List<CategoryMapper> findByLang(@Param("lang") String lang);
 }
