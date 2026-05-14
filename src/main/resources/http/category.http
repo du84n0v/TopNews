@@ -1,0 +1,57 @@
+###create Category
+POST http://localhost:8080/category/create
+Content-Type: application/json
+
+{
+  "nameUz": "Sport",
+  "nameRu": "Спорт",
+  "nameEn": "Sport",
+  "key": "sport",
+  "orderNumber": 1
+}
+
+###create category
+POST http://localhost:8080/category/create
+Content-Type: application/json
+
+{
+  "nameUz": "Jahon",
+  "nameRu": "Мир",
+  "nameEn": "World",
+  "key": "world",
+  "orderNumber": 2
+}
+
+###create Category
+POST http://localhost:8080/category/create
+Content-Type: application/json
+
+{
+  "nameUz": "Iqtisodiyot",
+  "nameRu": "Экономика",
+  "nameEn": "Economy",
+  "key": "economy",
+  "orderNumber": 3
+}
+
+###update Category
+PUT http://localhost:8080/category/update-by-id/1
+Content-Type: application/json
+
+{
+  "nameUz": "Texnologiya",
+  "nameRu": "Технология",
+  "nameEn": "Technology",
+  "key": "technology",
+  "orderNumber": 1
+}
+
+###delete Category
+PUT http://localhost:8080/category/detele-by-id/3
+
+###Category List
+GET http://localhost:8080/category/list
+
+###Accepted lang
+GET http://localhost:8080/category/by-lang
+Accept-Language: RU

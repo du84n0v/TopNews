@@ -1,13 +1,14 @@
 package top.news.service;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.news.dto.category.CategoryByLangDTO;
-import top.news.dto.category.CategoryDTO;
+import top.news.dto.category.CategoryRequestDTO;
+import top.news.dto.category.CategoryResponseDTO;
 import top.news.entity.Category;
-import top.news.entity.Region;
+import top.news.enums.AppLanguage;
+import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
+import top.news.mapper.CategoryLangMapper;
 import top.news.repository.CategoryRepository;
 
 import java.time.LocalDateTime;
@@ -21,9 +22,13 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public String createCategory(CategoryDTO dto) {
+    public String createCategory(CategoryRequestDTO dto) {
+        Optional<Category> optional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
+        if(optional.isPresent()){
+            throw new AppBadRequestException("Category key already exists");
+        }
         Category category = save(dto);
-        category.setVisible(true);
+        category.setVisible(Boolean.TRUE);
         category.setCreatedDate(LocalDateTime.now());
 
         categoryRepository.save(category);
@@ -31,7 +36,7 @@ public class CategoryService {
         return "Successfully created";
     }
 
-    private Category save(CategoryDTO dto) {
+    private Category save(CategoryRequestDTO dto) {
         Category category = new Category();
         category.setOrderNumber(dto.getOrderNumber());
         category.setNameUz(dto.getNameUz());
@@ -41,12 +46,20 @@ public class CategoryService {
         return category;
     }
 
-    public String updateCategoryById(Integer categoryId, CategoryDTO dto) {
+    public String updateCategoryById(Integer categoryId, CategoryRequestDTO dto) {
         Optional<Category> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Category is not found");
+            throw new ItemNotFoundException("Category not found");
+        }
+
+        Optional<Category> keyOptional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
+        if(keyOptional.isPresent() && !categoryId.equals(keyOptional.get().getId())){
+            throw new AppBadRequestException("Category presents");
         }
         Category category = save(dto);
+        category.setId(optional.get().getId());
+        category.setVisible(Boolean.TRUE);
+        category.setCreatedDate(optional.get().getCreatedDate());
 
         categoryRepository.save(category);
 
@@ -59,9 +72,7 @@ public class CategoryService {
             throw new ItemNotFoundException("Category is not found");
         }
 
-        int result = categoryRepository.delete(categoryId);
-
-        return (result > 0 ? "Successfully deleted" : "Hmm something went wrong");
+        return (categoryRepository.delete(categoryId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
     public List<Category> getCategoryList() {
@@ -74,24 +85,16 @@ public class CategoryService {
         return response;
     }
 
-    public List<CategoryByLangDTO> getCategoriesByLang(String lang) {
-        Iterable<Category> categories = categoryRepository.findAllByVisibleTrue();
-
-        List<CategoryByLangDTO> response = new LinkedList<>();
-        for (Category category : categories) {
-            CategoryByLangDTO current = new CategoryByLangDTO();
-            current.setId(category.getId());
-            current.setKey(category.getKey());
-
-            switch(lang){
-                case "uz" -> current.setName(category.getNameUz());
-                case "ru" -> current.setName(category.getNameRu());
-                case "en" -> current.setName(category.getNameEn());
-            }
-
-            response.add(current);
+    public List<CategoryResponseDTO> getCategoriesByLang(AppLanguage lang) {
+        List<CategoryLangMapper> mappers = categoryRepository.findByLang(lang.name());
+        List<CategoryResponseDTO> response = new LinkedList<>();
+        for (CategoryLangMapper mapper : mappers) {
+            CategoryResponseDTO dto = new CategoryResponseDTO();
+            dto.setId(mapper.getId());
+            dto.setCategoryKey(mapper.getKey());
+            dto.setName(mapper.getName());
+            response.add(dto);
         }
-
         return response;
     }
 }

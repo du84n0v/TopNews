@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryDTO {
+public class CategoryRequestDTO {
     @NotNull
     private Integer orderNumber;
     @NotBlank
@@ -18,4 +18,5 @@ public class CategoryDTO {
     private String nameEn;
     @NotNull
     private String key;
+
 }

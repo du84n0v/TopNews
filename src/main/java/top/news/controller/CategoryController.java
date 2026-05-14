@@ -4,9 +4,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.news.dto.category.CategoryByLangDTO;
-import top.news.dto.category.CategoryDTO;
+import top.news.dto.category.CategoryRequestDTO;
+import top.news.dto.category.CategoryResponseDTO;
 import top.news.entity.Category;
+import top.news.enums.AppLanguage;
 import top.news.service.CategoryService;
 
 import java.util.List;
@@ -19,13 +20,13 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@Valid @RequestBody CategoryDTO dto){
+    public ResponseEntity<String> create(@Valid @RequestBody CategoryRequestDTO dto){
         return ResponseEntity.ok(categoryService.createCategory(dto));
     }
 
     @PutMapping("/update-by-id/{categoryId}")
     public ResponseEntity<String> updateById(@PathVariable Integer categoryId,
-                                             @RequestBody CategoryDTO dto){
+                                             @RequestBody CategoryRequestDTO dto){
         return ResponseEntity.ok(categoryService.updateCategoryById(categoryId, dto));
     }
 
@@ -40,7 +41,7 @@ public class CategoryController {
     }
 
     @GetMapping("/by-lang")
-    public ResponseEntity<List<CategoryByLangDTO>> byLang(@RequestHeader(value = "Accept-Language", defaultValue = "uz") String lang){
+    public ResponseEntity<List<CategoryResponseDTO>> byLang(@RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage lang){
         return ResponseEntity.ok(categoryService.getCategoriesByLang(lang));
     }
 }
