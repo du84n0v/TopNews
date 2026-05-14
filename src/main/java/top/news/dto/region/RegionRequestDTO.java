@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegionDTO {
+public class RegionRequestDTO {
     @NotNull
     private Integer orderNumber;
     @NotBlank

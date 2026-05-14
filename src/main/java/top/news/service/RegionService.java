@@ -2,10 +2,13 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.news.dto.region.RegionByLangDTO;
-import top.news.dto.region.RegionDTO;
+import top.news.dto.region.RegionRequestDTO;
+import top.news.dto.region.RegionResponseDTO;
 import top.news.entity.Region;
+import top.news.enums.AppLanguage;
+import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
+import top.news.mapper.RegionMapper;
 import top.news.repository.RegionRepository;
 
 import java.time.LocalDateTime;
@@ -19,9 +22,13 @@ public class RegionService {
     @Autowired
     private RegionRepository regionRepository;
 
-    public String saveRegion(RegionDTO dto) {
+    public String saveRegion(RegionRequestDTO dto) {
+        Optional<Region> optional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        if(optional.isPresent()){
+            throw new AppBadRequestException("Key already exists");
+        }
         Region region = save(dto);
-        region.setVisible(true);
+        region.setVisible(Boolean.TRUE);
         region.setCreatedDate(LocalDateTime.now());
 
         regionRepository.save(region);
@@ -29,21 +36,25 @@ public class RegionService {
         return "Successfully created";
     }
 
-    public String updateById(Integer regionId, RegionDTO dto) {
+    public String updateById(Integer regionId, RegionRequestDTO dto) {
         Optional<Region> optional = regionRepository.findByIdAndVisibleTrue(regionId);
-
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Region is not found");
+            throw new ItemNotFoundException("Region not found");
+        }
+        Optional<Region> keyOptional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        if(keyOptional.isPresent() && !regionId.equals(keyOptional.get().getId())){
+            throw new AppBadRequestException("Key already exists");
         }
         Region region = save(dto);
-
+        region.setId(regionId);
+        region.setVisible(Boolean.TRUE);
+        region.setCreatedDate(optional.get().getCreatedDate());
         regionRepository.save(region);
 
         return "Successfully updated";
-
     }
 
-    private Region save(RegionDTO dto){
+    private Region save(RegionRequestDTO dto){
         Region region = new Region();
         region.setOrderNumber(dto.getOrderNumber());
         region.setNameUz(dto.getNameUz());
@@ -58,14 +69,11 @@ public class RegionService {
         if(optional.isEmpty()){
             throw new ItemNotFoundException("Region is not found");
         }
-
-        int result = regionRepository.delete(regionId);
-
-        return (result > 0 ? "Successfully deleted" : "Hmm something went wrong");
+        return (regionRepository.delete(regionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
     public List<Region> getList() {
-        Iterable<Region> regions = regionRepository.findAll();
+        Iterable<Region> regions = regionRepository.findAllByVisibleTrue();
 
         List<Region> response = new LinkedList<>();
         for (Region region : regions) {
@@ -74,24 +82,16 @@ public class RegionService {
         return response;
     }
 
-    public List<RegionByLangDTO> getRegionByLang(String lang) {
-        Iterable<Region> regions = regionRepository.findAllByVisibleTrue();
-        List<RegionByLangDTO> response = new LinkedList<>();
-
-        for (Region region : regions) {
-            RegionByLangDTO cur = new RegionByLangDTO();
-            cur.setId(region.getId());
-            cur.setKey(region.getKey());
-
-            switch(lang){
-                case "uz" -> cur.setName(region.getNameUz());
-                case "ru" -> cur.setName(region.getNameRu());
-                case "en" -> cur.setName(region.getNameEn());
-            }
-
-            response.add(cur);
+    public List<RegionResponseDTO> getRegionByLang(AppLanguage lang) {
+        List<RegionMapper> mappers = regionRepository.findAllByLang(lang.name());
+        List<RegionResponseDTO> response = new LinkedList<>();
+        for (RegionMapper mapper : mappers) {
+            RegionResponseDTO dto = new RegionResponseDTO();
+            dto.setId(mapper.getId());
+            dto.setKey(mapper.getKey());
+            dto.setName(mapper.getName());
+            response.add(dto);
         }
-
         return response;
     }
 }

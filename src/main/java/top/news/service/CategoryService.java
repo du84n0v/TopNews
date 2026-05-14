@@ -91,7 +91,7 @@ public class CategoryService {
         for (CategoryLangMapper mapper : mappers) {
             CategoryResponseDTO dto = new CategoryResponseDTO();
             dto.setId(mapper.getId());
-            dto.setCategoryKey(mapper.getKey());
+            dto.setKey(mapper.getKey());
             dto.setName(mapper.getName());
             response.add(dto);
         }

@@ -1,4 +1,57 @@
-###by lang
-GET localhost:8080/region/...
-Accept-Language: uz
-...
+###create Region
+POST http://localhost:8080/region/create
+Content-Type: application/json
+
+{
+  "nameUz": "Toshkent",
+  "nameRu": "Ташкент",
+  "nameEn": "Tashkent",
+  "key": "tashkent",
+  "orderNumber": 1
+}
+
+###create Region
+POST http://localhost:8080/region/create
+Content-Type: application/json
+
+{
+  "nameUz": "Samarqand",
+  "nameRu": "Самарканд",
+  "nameEn": "Samarkand",
+  "key": "samarkand",
+  "orderNumber": 2
+}
+
+###create Region
+POST http://localhost:8080/region/create
+Content-Type: application/json
+
+{
+  "nameUz": "Buxoro",
+  "nameRu": "Бухара",
+  "nameEn": "Bukhara",
+  "key": "bukhara",
+  "orderNumber": 3
+}
+
+###update Region
+PUT http://localhost:8080/region/update-by-id/1
+Content-Type: application/json
+
+{
+  "nameUz": "Surxondaryo",
+  "nameRu": "Сурхандарья",
+  "nameEn": "Surkhandarya",
+  "key": "surkhandarya",
+  "orderNumber": 1
+}
+
+###delete Region
+PUT http://localhost:8080/region/delete-by-id/3
+
+###get Region List
+GET http://localhost:8080/region/list
+
+### get by lang
+GET http://localhost:8080/region/by-lang
+Accept-Language: RU
