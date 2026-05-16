@@ -5,16 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import top.news.dto.profile.ProfileFilterDTO;
-import top.news.dto.profile.ProfileRequestDTO;
-import top.news.dto.profile.ProfileResponseDTO;
-import top.news.dto.profile.ProfileDetailUpdateDTO;
+import top.news.dto.profile.*;
 import top.news.entity.Profile;
 import top.news.enums.ProfileRoleEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
 import top.news.repository.ProfileRepository;
 import top.news.repository.custom.ProfileCustomRepository;
+import top.news.util.MD5Encode;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -143,5 +141,32 @@ public class ProfileService {
         profileRoleService.merge(profileId, dto.getRoleList());
 
         return toResponseDTO(profile, dto.getRoleList());
+    }
+
+    public String updateDetail(Integer profileId, ProfileDetailUpdateDTO dto) {
+        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        if(optional.isEmpty()){
+            throw new ItemNotFoundException("Profile not foud");
+        }
+        Profile profile = optional.get();
+        profile.setName(dto.getName());
+        profile.setSurname(dto.getSurname());
+        profileRepository.save(profile);
+        return "Successfully updated";
+    }
+
+    public String updatePassword(Integer profileId, ProfileUpdatePasswordDTO pDto) {
+        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        if(optional.isEmpty()){
+            throw new ItemNotFoundException("Profile not found");
+        }
+        Profile profile = optional.get();
+        if(!profile.getPassword().equals(MD5Encode.encode(pDto.getCurrentPassword()))){
+            throw new AppBadRequestException("Current password is wrong");
+        }
+        profile.setPassword(MD5Encode.encode(pDto.getNewPassword()));
+        profileRepository.save(profile);
+
+        return "Successfully updated";
     }
 }

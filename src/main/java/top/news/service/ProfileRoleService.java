@@ -1,5 +1,6 @@
 package top.news.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.news.entity.ProfileRole;
@@ -34,6 +35,7 @@ public class ProfileRoleService {
 
     }
 
+    @Transactional
     public void merge(Integer profileId, List<ProfileRoleEnum> roleList) {
         deleteProfileRoles(profileId);
 

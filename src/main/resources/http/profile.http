@@ -1,23 +1,71 @@
 ###create profile
-POST localhost:8080/profile/create
+POST http://localhost:8080/profile/create
 Content-Type: application/json
 
 {
-    "name": "Eshmat",
-    "surname": "Toshmatov",
-    "username": "eshmat_jurnalist@topnews.uz",
-    "password": "moderatorPassword777",
-    "roleList": ["MODERATOR", "USER"],
-    "status": "ACTIVE"
+  "name": "Ali",
+  "surname": "Valiyev",
+  "username": "ali@gmail.com",
+  "password": "ali123",
+  "status": "ACTIVE",
+  "roleList": ["MODERATOR"]
 }
 
-###get by id
-GET localhost:8080/profile/by-id/3
-
-###filter
-POST localhost:8080/profile/filter?page=1&size=5
+###create profile
+POST http://localhost:8080/profile/create
 Content-Type: application/json
 
 {
-  "name": "at"
+  "name": "Sardor",
+  "surname": "Rahimov",
+  "username": "sardor@gmail.com",
+  "password": "sardor123",
+  "status": "ACTIVE",
+  "roleList": ["PUBLISHER"]
+}
+
+###create profile
+POST http://localhost:8080/profile/create
+Content-Type: application/json
+
+{
+  "name": "Jasur",
+  "surname": "Toshmatov",
+  "username": "jasur@gmail.com",
+  "password": "jasur123",
+  "status": "ACTIVE",
+  "roleList": ["MODERATOR", "PUBLISHER"]
+}
+
+###get profile list
+GET localhost:8080/profile/list
+
+###update admin
+PUT http://localhost:8080/profile/admin-update/2
+Content-Type: application/json
+
+{
+  "name": "Ali",
+  "surname": "Valiyev",
+  "username": "ali_new@gmail.com",
+  "status": "BLOCKED",
+  "roleList": ["MODERATOR"]
+}
+
+###update delail
+PUT http://localhost:8080/profile/update-detail/3
+Content-Type: application/json
+
+{
+  "name": "Sarvar",
+  "surname": "Rahimov"
+}
+
+###update password
+PUT http://localhost:8080/profile/update-password/1
+Content-Type: application/json
+
+{
+  "currentPassword": "11111",
+  "newPassword": "ali456"
 }

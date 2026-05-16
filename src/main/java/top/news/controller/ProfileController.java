@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.news.dto.profile.ProfileRequestDTO;
-import top.news.dto.profile.ProfileFilterDTO;
-import top.news.dto.profile.ProfileResponseDTO;
+import top.news.dto.profile.*;
 import top.news.service.ProfileService;
 
 @RestController
@@ -27,6 +25,12 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.updateProfile(profileId, dto));
     }
 
+    @PutMapping("update-detail/{profileId}")
+    public ResponseEntity<String> updateDetail(@PathVariable Integer profileId,
+                                                           @RequestBody ProfileDetailUpdateDTO dto){
+        return ResponseEntity.ok(profileService.updateDetail(profileId, dto));
+    }
+
     @GetMapping("/by-id/{profileId}")
     public ResponseEntity<ProfileResponseDTO> byId(@PathVariable Integer profileId){
         return ResponseEntity.ok(profileService.getById(profileId));
@@ -41,6 +45,12 @@ public class ProfileController {
     public ResponseEntity<PageImpl<ProfileResponseDTO>> list(@RequestParam(value = "page", defaultValue = "1") int page,
                                                              @RequestParam(value = "size", defaultValue = "10") int size){
         return ResponseEntity.ok(profileService.getProfileList(page-1, size));
+    }
+
+    @PutMapping("/update-password/{profileId}")
+    public ResponseEntity<String> updatePassword(@PathVariable Integer profileId,
+                                                 @RequestBody ProfileUpdatePasswordDTO pDto){
+        return ResponseEntity.ok(profileService.updatePassword(profileId, pDto));
     }
 
     @PostMapping("/filter")
