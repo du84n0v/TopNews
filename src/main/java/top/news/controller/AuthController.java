@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.news.dto.AuthDTO;
+import top.news.dto.auth.RegistrationDTO;
 import top.news.dto.profile.ProfileDetailUpdateDTO;
 import top.news.service.AuthService;
 import top.news.service.ProfileService;
@@ -19,7 +19,7 @@ public class AuthController {
     private ProfileService profileService;
 
     @PostMapping("/registration")
-    private ResponseEntity<String> register(@Valid @RequestBody AuthDTO dto){
+    private ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO dto){
         return ResponseEntity.ok(authService.register(dto));
     }
 

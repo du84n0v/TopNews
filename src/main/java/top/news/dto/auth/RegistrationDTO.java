@@ -1,4 +1,4 @@
-package top.news.dto;
+package top.news.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthDTO {
+public class RegistrationDTO {
     @NotBlank(message = "Name should not be empty")
     private String name;
     @NotBlank(message = "Surname should not be empty")
