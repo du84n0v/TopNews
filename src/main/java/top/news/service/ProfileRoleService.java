@@ -50,6 +50,7 @@ public class ProfileRoleService {
         profileRoleRepository.saveAll(roles);
     }
 
+    @Transactional
     public void deleteProfileRoles(Integer profileId) {
         profileRoleRepository.deleteByProfileId(profileId);
     }

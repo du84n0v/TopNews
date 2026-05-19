@@ -1,0 +1,2 @@
+###get history
+GET localhost:8080/email-history/by-email/oqmol24@gmail.com?page=1&size=3

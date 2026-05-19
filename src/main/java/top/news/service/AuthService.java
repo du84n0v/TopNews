@@ -40,7 +40,7 @@ public class AuthService {
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
         profile.setPassword(MD5Encode.encode(dto.getPassword()));
-        profile.setStatus(ProfileStatusEnum.ACTIVE);
+        profile.setStatus(ProfileStatusEnum.NOT_ACTIVE);
         profile.setVisible(Boolean.TRUE);
         profile.setCreatedDate(LocalDateTime.now());
 
@@ -48,7 +48,7 @@ public class AuthService {
 
         profileRoleService.merge(profile.getId(), List.of(ProfileRoleEnum.ROLE_USER));
 
-        mailSenderService.verificationCode(profile.getUsername(), profile.getId());
+        mailSenderService.verificationCode(profile.getUsername());
 
         return "Registration success. Please verify your email or phone.";
     }
