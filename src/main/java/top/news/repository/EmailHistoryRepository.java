@@ -18,4 +18,7 @@ public interface EmailHistoryRepository extends CrudRepository<EmailHistory, Int
     @Query("SELECT COUNT(eh) FROM EmailHistory eh " +
             " WHERE eh.toEmail = ?1 AND eh.createdDate >= ?2 ")
     int countByToEmailAfter(String toAccount, LocalDateTime from);
+
+    @Query("SELECT eh.code FROM EmailHistory eh WHERE eh.toEmail = ?1")
+    String findCodeByToEmail(String username);
 }

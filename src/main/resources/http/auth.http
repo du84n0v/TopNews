@@ -19,3 +19,12 @@ Content-Type: application/json
   "username": "kumbay64@gmail.com",
   "password": "54321"
 }
+
+###verify
+POST localhost:8080/auth/verify
+Content-Type: application/json
+
+{
+  "username": "oqmol24@gmail.com",
+  "code": "483168"
+}

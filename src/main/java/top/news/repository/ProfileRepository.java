@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import top.news.entity.Profile;
+import top.news.enums.ProfileStatusEnum;
 
 import java.util.Optional;
 
