@@ -3,8 +3,10 @@ package top.news.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.news.dto.auth.LoginDTO;
 import top.news.dto.auth.RegistrationDTO;
 import top.news.dto.auth.VerificationDTO;
+import top.news.dto.profile.ProfileResponseDTO;
 import top.news.entity.EmailHistory;
 import top.news.entity.Profile;
 import top.news.entity.VerificationAttempt;
@@ -35,6 +37,8 @@ public class AuthService {
     private VerificationAttemptRepository attemptRepository;
     @Autowired
     private EmailHistoryRepository emailHistoryRepository;
+    @Autowired
+    private ProfileService profileService;
 
     public String register(RegistrationDTO dto) {
         Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
@@ -145,11 +149,18 @@ public class AuthService {
         return "Check your email box";
     }
 
-//    public ProfileResponseDTO login(LoginDTO login) {
-//        Optional<Profile> optional = profileRepository.findByUsernameAndPasswordAndStatusAndVisibleTrue(login.getUsername(), login.getPassword(), ProfileStatusEnum.ACTIVE);
-//        if(optional.isEmpty()){
-//            throw new ItemNotFoundException("Username or Password is wrong");
-//        }
-//
-//    }
+    public ProfileResponseDTO login(LoginDTO login) {
+        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(login.getUsername());
+        if(optional.isEmpty()){
+            throw new ItemNotFoundException("Username or password is wrong");
+        }
+        Profile profile = optional.get();
+        if(!profile.getPassword().equals(MD5Encode.encode(login.getPassword()))){
+            throw new ItemNotFoundException("Username or password is wrong");
+        }
+        if(!profile.getStatus().equals(ProfileStatusEnum.ACTIVE)){
+            throw new AppBadRequestException("This user is not active");
+        }
+        return profileService.toResponseDTO(profile, profileRoleService.getProfileRolesById(profile.getId()));
+    }
 }

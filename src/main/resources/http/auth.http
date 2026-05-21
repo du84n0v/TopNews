@@ -31,3 +31,21 @@ Content-Type: application/json
 
 ###resend
 POST localhost:8080/auth/resend-code?email=oqmol24@gmail.com
+
+###login
+GET localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "asdf",
+  "password": "asd"
+}
+
+###login
+GET localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "oqmol24@gmail.com",
+  "password": "12345"
+}
