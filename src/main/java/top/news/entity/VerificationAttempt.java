@@ -23,4 +23,10 @@ public class VerificationAttempt {
 
     @Column(name = "last_attempt")
     private LocalDateTime lastAttempt;
+
+    @Column(name = "resend_count")
+    private Integer resendCount;
+
+    @Column(name = "last_resend_time")
+    private LocalDateTime lastResendTime;
 }

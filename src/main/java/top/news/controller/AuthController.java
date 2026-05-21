@@ -29,11 +29,18 @@ public class AuthController {
         return ResponseEntity.ok(authService.verify(dto));
     }
 
+    @PostMapping("/resend-code")
+    public ResponseEntity<String> resend(@RequestParam String email){
+        return ResponseEntity.ok(authService.resend(email));
+    }
+
     @PutMapping("/update/{profileId}")
     public ResponseEntity<String> update(@PathVariable Integer profileId,
                                          @Valid @RequestBody ProfileDetailUpdateDTO dto){
         return ResponseEntity.ok(profileService.updateProfileById(profileId, dto));
     }
+
+
 
 //    @GetMapping("/login")
 //    public ResponseEntity<ProfileResponseDTO> login(@RequestBody LoginDTO login){

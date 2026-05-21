@@ -1,9 +1,11 @@
 package top.news.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.news.dto.auth.RegistrationDTO;
 import top.news.dto.auth.VerificationDTO;
+import top.news.entity.EmailHistory;
 import top.news.entity.Profile;
 import top.news.entity.VerificationAttempt;
 import top.news.enums.ProfileRoleEnum;
@@ -15,6 +17,7 @@ import top.news.repository.ProfileRepository;
 import top.news.repository.VerificationAttemptRepository;
 import top.news.util.MD5Encode;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -59,9 +62,17 @@ public class AuthService {
 
         mailSenderService.verificationCode(profile.getUsername());
 
+        VerificationAttempt attempt = new VerificationAttempt();
+        attempt.setUsername(dto.getUsername());
+        attempt.setAttemptCount(0);
+        attempt.setLastAttempt(LocalDateTime.now());
+        attempt.setLastResendTime(LocalDateTime.now());
+        attemptRepository.save(attempt);
+
         return "Registration success. Please verify your email or phone.";
     }
 
+    @Transactional
     public String verify(VerificationDTO dto) {
         LocalDateTime now = LocalDateTime.now();
         VerificationAttempt attempt = attemptRepository.findByUsername(dto.getUsername());
@@ -82,8 +93,11 @@ public class AuthService {
             }
         }
 
-        String actualCode = emailHistoryRepository.findCodeByToEmail(dto.getUsername());
-        if(actualCode != null && !actualCode.equals(dto.getCode())){
+        EmailHistory lastCode = emailHistoryRepository.findTopByToEmailOrderByCreatedDateDesc(dto.getUsername());
+        if(lastCode != null && lastCode.getCreatedDate().plusMinutes(2).isBefore(now)){
+            throw new AppBadRequestException("Code is expired. Please click resend to get new code");
+        }
+        if(lastCode != null && !lastCode.getCode().equals(dto.getCode())){
             attempt.setAttemptCount(attempt.getAttemptCount()+1);
             attempt.setLastAttempt(now);
             attemptRepository.save(attempt);
@@ -103,6 +117,32 @@ public class AuthService {
         attemptRepository.delete(attempt);
 
         return "Successfully activated. You can login by now";
+    }
+
+    public String resend(String email) {
+        LocalDateTime now = LocalDateTime.now();
+
+        VerificationAttempt attempt = attemptRepository.findByUsername(email);
+        if(attempt == null){
+            VerificationAttempt verificationAttempt = new VerificationAttempt();
+            verificationAttempt.setUsername(email);
+            verificationAttempt.setResendCount(1);
+            verificationAttempt.setLastResendTime(now);
+            attempt = attemptRepository.save(verificationAttempt);
+        }
+
+        if(attempt.getLastResendTime() != null){
+            LocalDateTime limit = attempt.getLastResendTime().plusMinutes(1);
+            if(limit.isAfter(now)){
+                long remain = Duration.between(now, limit).toSeconds();
+                throw new AppBadRequestException("Wait " + remain + "-seconds to resend code");
+            }
+        }
+        mailSenderService.verificationCode(email);
+        attempt.setLastResendTime(now);
+        attempt.setAttemptCount(0);
+        attemptRepository.save(attempt);
+        return "Check your email box";
     }
 
 //    public ProfileResponseDTO login(LoginDTO login) {

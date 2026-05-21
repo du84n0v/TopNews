@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import top.news.entity.EmailHistory;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface EmailHistoryRepository extends CrudRepository<EmailHistory, Integer> {
 
@@ -19,6 +20,5 @@ public interface EmailHistoryRepository extends CrudRepository<EmailHistory, Int
             " WHERE eh.toEmail = ?1 AND eh.createdDate >= ?2 ")
     int countByToEmailAfter(String toAccount, LocalDateTime from);
 
-    @Query("SELECT eh.code FROM EmailHistory eh WHERE eh.toEmail = ?1")
-    String findCodeByToEmail(String username);
+    EmailHistory findTopByToEmailOrderByCreatedDateDesc(String username);
 }

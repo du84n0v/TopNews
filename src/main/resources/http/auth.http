@@ -26,5 +26,8 @@ Content-Type: application/json
 
 {
   "username": "oqmol24@gmail.com",
-  "code": "483168"
+  "code": "483687"
 }
+
+###resend
+POST localhost:8080/auth/resend-code?email=oqmol24@gmail.com
