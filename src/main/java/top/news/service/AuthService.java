@@ -39,6 +39,8 @@ public class AuthService {
     private EmailHistoryRepository emailHistoryRepository;
     @Autowired
     private ProfileService profileService;
+    @Autowired
+    private SmsSenderService smsSenderService;
 
     public String register(RegistrationDTO dto) {
         Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
@@ -64,8 +66,12 @@ public class AuthService {
 
         profileRoleService.merge(profile.getId(), List.of(ProfileRoleEnum.ROLE_USER));
 
-        mailSenderService.verificationCode(profile.getUsername());
-
+        if(dto.getUsername().contains("@")) {
+            mailSenderService.verificationCode(profile.getUsername());
+        }
+        else{
+            smsSenderService.verificationCode(profile.getUsername());
+        }
         VerificationAttempt attempt = new VerificationAttempt();
         attempt.setUsername(dto.getUsername());
         attempt.setAttemptCount(0);
