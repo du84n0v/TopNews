@@ -1,0 +1,38 @@
+### createa attach
+POST http://localhost:8080/attaches/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.mp3"
+
+< C:/Users/user/Downloads/fassounds-escape-your-love-upbeat-fashion-pop-dance-412230.mp3
+
+### createa attach
+POST http://localhost:8080/attach/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="resume.pdf"
+
+< C:\Users\user\OneDrive\Ishchi stol\MyResume.pdf
+
+###upload
+POST localhost:8080/attaches/upload
+
+###open
+GET localhost:8080/attaches/open/0ba1d227-5f5e-48c2-9725-7bb47a4349e5.mp3
+
+###download
+GET localhost:8080/attaches/download/0ba1d22-5f5e-48c2-9725-7bb47a4349e5.mp3
+
+###pagination
+GET localhost:8080/attaches/pagination?page=2&size=2
+
+###delete
+DELETE localhost:8080/attaches/delete/0ba1d227-5f5e-48c2-9725-7bb47a4349e5.mp3
+
+###delete
+DELETE localhost:8080/attaches/delete/1a8be1ab-c878-4bdf-88e0-3c789eb880d5.mp4
+
+###delete
+DELETE localhost:8080/attaches/delete/6fe3b766-20cd-46b1-bde6-fb343a81894d.mp4
