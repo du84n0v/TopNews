@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Others
-src/main/java/top/news/requirement.txt
+src/main/resources/requirement.txt

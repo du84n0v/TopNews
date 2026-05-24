@@ -14,6 +14,18 @@ POST localhost:8080/auth/registration
 Content-Type: application/json
 
 {
+  "name": "Who",
+  "surname": "Whoev",
+  "username": "+998990720636",
+  "password": "54321"
+}
+
+
+###register
+POST localhost:8080/auth/registration
+Content-Type: application/json
+
+{
   "name": "Tesha",
   "surname": "Boltayev",
   "username": "kumbay64@gmail.com",

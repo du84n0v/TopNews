@@ -70,7 +70,7 @@ public class AuthService {
             mailSenderService.verificationCode(profile.getUsername());
         }
         else{
-            smsSenderService.verificationCode(profile.getUsername());
+            smsSenderService.sendSms(profile.getUsername());
         }
         VerificationAttempt attempt = new VerificationAttempt();
         attempt.setUsername(dto.getUsername());
