@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.news.dto.profile.*;
 import top.news.entity.Profile;
@@ -27,6 +28,8 @@ public class ProfileService {
     private ProfileRoleService profileRoleService;
     @Autowired
     private ProfileCustomRepository profileCustomRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     public ProfileResponseDTO save(ProfileRequestDTO dto) {
         Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
@@ -37,6 +40,7 @@ public class ProfileService {
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
+        profile.setPassword(encoder.encode(dto.getPassword()));
         profile.setStatus(dto.getStatus());
         profile.setVisible(Boolean.TRUE);
         profile.setCreatedDate(LocalDateTime.now());

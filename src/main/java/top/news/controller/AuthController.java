@@ -13,7 +13,7 @@ import top.news.service.AuthService;
 import top.news.service.ProfileService;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired

@@ -37,20 +37,20 @@ POST localhost:8080/auth/verify
 Content-Type: application/json
 
 {
-  "username": "oqmol24@gmail.com",
-  "code": "483687"
+  "username": "kumbay64@gmail.com",
+  "code": "494571"
 }
 
 ###resend
-POST localhost:8080/auth/resend-code?email=oqmol24@gmail.com
+POST localhost:8080/auth/resend-code?email=kumbay64@gmail.com
 
 ###login
 GET localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "asdf",
-  "password": "asd"
+  "username": "kumbay64@gmail.com",
+  "password": "54321"
 }
 
 ###login
