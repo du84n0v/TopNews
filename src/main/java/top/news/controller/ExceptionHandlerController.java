@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import top.news.exception.AppBadRequestException;
+import top.news.exception.BaseException;
 import top.news.exception.ItemNotFoundException;
 
 import java.util.*;
@@ -33,8 +34,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handle(RuntimeException e){
+        e.printStackTrace();
+        return ResponseEntity.internalServerError().body(e.getMessage());
+    }
+
     @ExceptionHandler({ItemNotFoundException.class, AppBadRequestException.class})
-    public ResponseEntity<String> handle(RuntimeException e) {
+    public ResponseEntity<?> handle(BaseException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

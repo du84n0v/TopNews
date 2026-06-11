@@ -8,7 +8,7 @@ Content-Type: application/json
   "username": "ali@gmail.com",
   "password": "ali123",
   "status": "ACTIVE",
-  "roleList": ["MODERATOR"]
+  "roleList": ["ROLE_MODERATOR"]
 }
 
 ###create profile
@@ -21,7 +21,7 @@ Content-Type: application/json
   "username": "sardor@gmail.com",
   "password": "sardor123",
   "status": "ACTIVE",
-  "roleList": ["PUBLISHER"]
+  "roleList": ["ROLE_PUBLISHER"]
 }
 
 ###create profile
@@ -34,7 +34,7 @@ Content-Type: application/json
   "username": "jasur@gmail.com",
   "password": "jasur123",
   "status": "ACTIVE",
-  "roleList": ["MODERATOR", "PUBLISHER"]
+  "roleList": ["ROLE_MODERATOR", "ROLE_PUBLISHER"]
 }
 
 ###get profile list

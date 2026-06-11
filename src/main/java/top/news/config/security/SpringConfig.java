@@ -5,12 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,6 +23,13 @@ public class SpringConfig {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtTokenFilter;
+
+    public static final String[] AUTH_WHITELIST = {
+            "/auth/**"
+    };
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
@@ -37,11 +44,11 @@ public class SpringConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
-        );
+        ).addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Basic Auth yoqilgan (Postman-da Authorization -> Basic Auth qismida username/password yuborish uchun)
-        http.httpBasic(Customizer.withDefaults());
-        http.formLogin(Customizer.withDefaults());
+//        http.httpBasic(Customizer.withDefaults());
+//        http.formLogin(Customizer.withDefaults());
 
         // CSRF himoyasini o'chiramiz (REST API loyihalar uchun standart holat)
         http.csrf(AbstractHttpConfigurer::disable);

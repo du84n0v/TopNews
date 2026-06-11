@@ -28,12 +28,12 @@ public class SmsSenderService {
 
     public void sendSms(String phone) {
         runOut(phone);
-        String token = getToken();
-        String providerUrl = "http://localhost:8082/sms/send";
+        String id = getId();
+        String providerUrl = "http://localhost:8083/sms/send";
         String code = generateCode();
         Map<String, String> request = new HashMap<>();
         String message = "Sizning Topnews portali uchun tastiqlash kodinggiz: " + code;
-        request.put("userToken", token);
+        request.put("clientId", id);
         request.put("phone", phone);
         request.put("message", message);
 
@@ -48,9 +48,9 @@ public class SmsSenderService {
         }
     }
 
-    private String getToken() {
-        String providerUrl = "http://localhost:8082/auth/login";
-        LoginRequest request = new LoginRequest(companyEmail, companyPassword);
+    private String getId() {
+        String providerUrl = "http://localhost:8083/client/login";
+        LoginRequest request = new LoginRequest("me", companyPassword);
 
         return restTemplate.postForObject(providerUrl, request, String.class);
     }
