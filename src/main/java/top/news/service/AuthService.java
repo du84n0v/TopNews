@@ -2,11 +2,19 @@ package top.news.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import top.news.config.security.CustomUserDetails;
 import top.news.dto.auth.LoginDTO;
 import top.news.dto.auth.RegistrationDTO;
 import top.news.dto.auth.VerificationDTO;
 import top.news.dto.profile.ProfileResponseDTO;
+import top.news.dto.security.JwtDTO;
 import top.news.entity.EmailHistory;
 import top.news.entity.Profile;
 import top.news.entity.VerificationAttempt;
@@ -17,7 +25,7 @@ import top.news.exception.ItemNotFoundException;
 import top.news.repository.EmailHistoryRepository;
 import top.news.repository.ProfileRepository;
 import top.news.repository.VerificationAttemptRepository;
-import top.news.util.MD5Encode;
+import top.news.util.JwtUtil;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -41,6 +49,10 @@ public class AuthService {
     private ProfileService profileService;
     @Autowired
     private SmsSenderService smsSenderService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public String register(RegistrationDTO dto) {
         Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
@@ -57,7 +69,7 @@ public class AuthService {
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
-        profile.setPassword(MD5Encode.encode(dto.getPassword()));
+        profile.setPassword(passwordEncoder.encode(dto.getPassword()));
         profile.setStatus(ProfileStatusEnum.NOT_ACTIVE);
         profile.setVisible(Boolean.TRUE);
         profile.setCreatedDate(LocalDateTime.now());
@@ -155,18 +167,40 @@ public class AuthService {
         return "Check your email box";
     }
 
-    public ProfileResponseDTO login(LoginDTO login) {
-        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(login.getUsername());
-        if(optional.isEmpty()){
-            throw new ItemNotFoundException("Username or password is wrong");
-        }
-        Profile profile = optional.get();
-        if(!profile.getPassword().equals(MD5Encode.encode(login.getPassword()))){
-            throw new ItemNotFoundException("Username or password is wrong");
-        }
-        if(!profile.getStatus().equals(ProfileStatusEnum.ACTIVE)){
+    public ProfileResponseDTO login(LoginDTO dto) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
+            );
+
+            if (authentication.isAuthenticated()) {
+                CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+
+                String jwt = JwtUtil.encode(new JwtDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getSurname(),
+                        user.getUsername(),
+                        user.getRoles()
+                ));
+
+                ProfileResponseDTO response = new ProfileResponseDTO();
+                response.setName(user.getName());
+                response.setSurname(user.getSurname());
+                response.setUsername(user.getUsername());
+                response.setRoleList(user.getRoles()
+                        .stream()
+                        .map(ProfileRoleEnum::valueOf)
+                        .toList());
+                response.setJwt(jwt);
+                return response;
+            }
+        } catch (BadCredentialsException e) {
+            throw new AppBadRequestException("Username or password wrong");
+        } catch (DisabledException e) {
             throw new AppBadRequestException("This user is not active");
         }
-        return profileService.toResponseDTO(profile, profileRoleService.getProfileRolesById(profile.getId()));
+        throw new AppBadRequestException("Username or password wrong");
     }
+
 }

@@ -16,7 +16,7 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String title;
 
     @Column(nullable = false)

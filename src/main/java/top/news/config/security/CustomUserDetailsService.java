@@ -33,10 +33,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         for (ProfileRole role : profile.getRoles()) {
             roleEnums.add(role.getRole());
         }
-        return new CustomUserDetails(profile.getId(),
+        return new CustomUserDetails(
+                profile.getId(),
                 profile.getUsername(),
                 profile.getPassword(),
+                profile.getName(),
+                profile.getSurname(),
                 profile.getStatus(),
-                roleEnums);
+                roleEnums.stream().map(Enum::name).toList()
+        );
     }
 }

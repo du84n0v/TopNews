@@ -34,7 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         final String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
@@ -42,8 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        final String token = header.substring(7).trim();
         try {
-            final String token = header.substring(7).trim();
             JwtDTO jwtDTO = JwtUtil.decode(token);
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(jwtDTO.getUsername());
 
@@ -54,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response); // Continue the filter chain
         } catch (JwtException | UsernameNotFoundException e) {
             filterChain.doFilter(request, response); // Continue the filter chain
-            return;
         }
     }
 }

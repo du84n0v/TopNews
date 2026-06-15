@@ -1,47 +1,42 @@
 package top.news.config.security;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import top.news.enums.ProfileRoleEnum;
 import top.news.enums.ProfileStatusEnum;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class CustomUserDetails  implements UserDetails {
     private Integer id;
     private String username;
     private String password;
+    private String name;
+    private String surname;
     private ProfileStatusEnum status;
-    private List<ProfileRoleEnum> roles;
+    private List<String> roles;
 
-    public CustomUserDetails(Integer id,
-                             String username,
-                             String password,
+    public CustomUserDetails(Integer id, String username, String password,
+                             String name, String surname,
                              ProfileStatusEnum status,
-                             List<ProfileRoleEnum> roles) {
+                             List<String> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.name = name;
+        this.surname = surname;
         this.status = status;
         this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> list = new ArrayList<>();
-        for (ProfileRoleEnum role : roles) {
-            list.add(new SimpleGrantedAuthority(role.name()));
-        }
-        return list;
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 
     @Override
@@ -51,7 +46,7 @@ public class CustomUserDetails  implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return status == ProfileStatusEnum.ACTIVE;
     }
 
     @Override
@@ -61,6 +56,6 @@ public class CustomUserDetails  implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status == ProfileStatusEnum.ACTIVE;
+        return true;
     }
 }

@@ -37,8 +37,8 @@ POST localhost:8080/auth/verify
 Content-Type: application/json
 
 {
-  "username": "+998900990636",
-  "code": "690314"
+  "username": "kumbay64@gmail.com",
+  "code": "212393"
 }
 
 ###resend
