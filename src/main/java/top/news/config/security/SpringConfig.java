@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SpringConfig {
 
     @Autowired
@@ -31,7 +33,14 @@ public class SpringConfig {
     private JwtAuthenticationFilter jwtTokenFilter;
 
     public static final String[] AUTH_WHITELIST = {
-            "/auth/**"
+            "/auth/**",
+            "/article/last-n-by-section/{sectionId}",
+            "/article/last-n-by-category/{categoryId}",
+            "/article/last-n-by-region/{regionId}",
+            "/article/last-12",
+            "/article/most-read-except/{articleId}",
+            "/article/increase-view-count-by-id/{articleId}",
+            "/article/filter"
     };
 
     @Bean
@@ -45,18 +54,12 @@ public class SpringConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
         ).addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Basic Auth yoqilgan (Postman-da Authorization -> Basic Auth qismida username/password yuborish uchun)
-//        http.httpBasic(Customizer.withDefaults());
-//        http.formLogin(Customizer.withDefaults());
-
-        // CSRF himoyasini o'chiramiz (REST API loyihalar uchun standart holat)
         http.csrf(AbstractHttpConfigurer::disable);
 
-        // CORS sozlamalari (Frontend ulanishi uchun hamma narsaga ruxsat berilgan)
         http.cors(cors -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOriginPatterns(List.of("*"));
@@ -83,7 +86,7 @@ public class SpringConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

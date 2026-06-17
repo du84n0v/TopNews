@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import top.news.dto.attach.AttachShortInfoDTO;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +22,7 @@ public class ArticleShortInfoDTO {
 
     private String description;
 
-    private Integer imageId;
+    private AttachShortInfoDTO content;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime publishedDate;
 }

@@ -1,0 +1,34 @@
+###Creat article
+POST localhost:8080/article/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNTg4MTUzLCJleHAiOjE3ODE1OTE3NTN9.c02wDMKo8vlg19bOgcFnHB6gAuJvs8Egs3LtHSIrNREv5jdBSKZoo12iRZ8PsUBN
+
+{
+  "title": "Eron AQSH urishi",
+  "description": "Erun va aqsh sulhga yaqin",
+  "content": "assdggasdjlkhhgeuiarhgernvkdzxfnvdfknv s fnewargfhioearnhgfdkasl gfdas oiwerhffeoiwfndasnhfwaednfoewahf fedwoai;fhhjewfnhweuo",
+  "categoryIdList": [1, 3],
+  "sectionIdList": [1, 2]
+}
+
+###update article
+PUT localhost:8080/article/update/b8cc2397-f12b-4206-a7ce-cdd90e4d6af2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNTg4MTUzLCJleHAiOjE3ODE1OTE3NTN9.c02wDMKo8vlg19bOgcFnHB6gAuJvs8Egs3LtHSIrNREv5jdBSKZoo12iRZ8PsUBN
+
+{
+  "title": "Eron AQSH urishi",
+  "description": "Erun va aqsh urush tugadi",
+  "content": "assdggasdjlkhhgeuiarhgernvkdzxfnvdfknv s fnewargfhioearnhgfdkasl gfdas oiwerhffeoiwfndasnhfwaednfoewahf fedwoai;fhhjewfnhweuo",
+  "categoryIdList": [2, 3],
+  "sectionIdList": [1, 2]
+}
+
+### filter for moderator
+POST localhost:8080/article/moderator/filter
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNzE0MjcxLCJleHAiOjE3ODE3MTc4NzF9.Q-JUzVs8O-jaWVUAn7v28A_Pk1rXkWUI0LXudVotjjItMQKhcRcGi29ZAsaIfxDh
+
+{
+  "title": "eROn"
+}

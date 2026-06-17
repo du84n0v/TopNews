@@ -19,17 +19,17 @@ public class Article {
     @Column(nullable = false, columnDefinition = "text")
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String description;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "text")
     private String content;
 
     @Column(name = "shared_count")
     private Integer sharedCount;
 
     @Column(name = "image_id")
-    private Integer imageId;
+    private String imageId;
 
     @Column(name = "region_id")
     private Integer regionId;

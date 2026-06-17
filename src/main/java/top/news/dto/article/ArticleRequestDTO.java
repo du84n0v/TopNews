@@ -20,7 +20,7 @@ public class ArticleRequestDTO {
     @NotBlank
     private String content;
 
-    private Integer imageId;
+    private String imageId;
 
     private Integer regionId;
 

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import top.news.dto.attach.AttachDTO;
+import top.news.dto.attach.AttachShortInfoDTO;
 import top.news.entity.AttachEntity;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -184,5 +185,9 @@ public class AttachService {
         }
 
         return "File successfully deleted";
+    }
+
+    public AttachShortInfoDTO openDTO(String id) {
+        return new AttachShortInfoDTO(id, attachUrl + "/attach/open/" + id);
     }
 }
