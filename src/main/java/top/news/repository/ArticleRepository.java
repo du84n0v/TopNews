@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import top.news.entity.Article;
+import top.news.entity.ArticleEntity;
 import top.news.enums.ArticleStatusEnum;
 import top.news.mapper.ArticleShortInfoMapper;
 
@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface ArticleRepository extends CrudRepository<Article, String> {
+public interface ArticleRepository extends CrudRepository<ArticleEntity, String> {
 
-    Optional<Article> findByIdAndVisibleTrue(String articleId);
+    Optional<ArticleEntity> findByIdAndVisibleTrue(String articleId);
 
     @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
-            " FROM Article a " +
-            " INNER JOIN ArticleSection ss ON a.id=ss.articleId " +
+            " FROM ArticleEntity a " +
+            " INNER JOIN ArticleSectionEntity ss ON a.id=ss.articleId " +
             " WHERE ss.sectionId =?1 " +
             " AND a.visible=true " +
             " AND a.status='PUBLISHED'" +
@@ -28,7 +28,7 @@ public interface ArticleRepository extends CrudRepository<Article, String> {
     Page<ArticleShortInfoMapper> findNArticleBySectionId(Integer sectionId, Pageable pageable);
 
     @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
-            " FROM Article  a " +
+            " FROM ArticleEntity  a " +
             " WHERE a.id NOT IN ?1 " +
             " AND a.status='PUBLISHED' " +
             " AND a.visible=true " +
@@ -36,8 +36,8 @@ public interface ArticleRepository extends CrudRepository<Article, String> {
     Page<ArticleShortInfoMapper> getLast12(List<String> ids, Pageable pageable);
 
     @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
-            " FROM Article a " +
-            " INNER JOIN ArticleCategory ac ON a.id=ac.articleId " +
+            " FROM ArticleEntity a " +
+            " INNER JOIN ArticleCategoryEntity ac ON a.id=ac.articleId " +
             " WHERE ac.categoryId=?1 " +
             " AND a.status='PUBLISHED' " +
             " AND a.visible=true " +
@@ -45,7 +45,7 @@ public interface ArticleRepository extends CrudRepository<Article, String> {
     Page<ArticleShortInfoMapper> findNArticleByCategoryId(Integer categoryId, Pageable pageable);
 
     @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
-            " FROM Article a " +
+            " FROM ArticleEntity a " +
             " WHERE a.regionId=?1 " +
             " AND a.status='PUBLISHED'" +
             " AND a.visible=true " +
@@ -53,7 +53,7 @@ public interface ArticleRepository extends CrudRepository<Article, String> {
     Page<ArticleShortInfoMapper> findNArticleByRegionId(Integer regionId, Pageable pageable);
 
     @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
-            " FROM Article a " +
+            " FROM ArticleEntity a " +
             " WHERE a.id <> ?1 " +
             " AND a.status='PUBLISHED' " +
             " AND a.visible=true " +
@@ -62,32 +62,32 @@ public interface ArticleRepository extends CrudRepository<Article, String> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE Article a " +
+    @Query("UPDATE ArticleEntity a " +
             " SET a.viewCount = a.viewCount + 1 " +
             " WHERE a.id = ?1")
     Integer increaseViewCountById(String articleId);
 
-    @Query("SELECT a.viewCount  FROM Article  a WHERE a.id = ?1")
+    @Query("SELECT a.viewCount  FROM ArticleEntity  a WHERE a.id = ?1")
     Integer findViewCountById(String articleId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Article a " +
+    @Query("UPDATE ArticleEntity a " +
             " SET a.sharedCount = a.sharedCount + 1 " +
             " WHERE a.id = ?1")
     int increaseShareCountById(String articleId);
 
-    @Query("SELECT a.sharedCount FROM Article  a WHERE a.id = ?1")
+    @Query("SELECT a.sharedCount FROM ArticleEntity  a WHERE a.id = ?1")
     Integer findShareCountById(String articleId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Article a SET a.visible=FALSE WHERE a.id = ?1")
+    @Query("UPDATE ArticleEntity a SET a.visible=FALSE WHERE a.id = ?1")
     int deleteArticleById(String articleId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Article a " +
+    @Query("UPDATE ArticleEntity a " +
             " SET a.status = ?2, a.publisherId = ?3, " +
             " a.publishedDate = ?4" +
             " WHERE a.id = ?1")

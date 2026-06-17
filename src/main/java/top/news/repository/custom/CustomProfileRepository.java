@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import top.news.dto.profile.ProfileFilterDTO;
-import top.news.entity.Profile;
+import top.news.entity.ProfileEntity;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,9 +17,9 @@ public class CustomProfileRepository {
     @Autowired
     private QueryPagination queryPagination;
 
-    public Page<Profile> filter(ProfileFilterDTO dto, Integer page, Integer size) {
-        StringBuilder select = new StringBuilder("SELECT DISTINCT p FROM Profile p ");
-        StringBuilder count = new StringBuilder("SELECT COUNT(DISTINCT p) FROM Profile p ");
+    public Page<ProfileEntity> filter(ProfileFilterDTO dto, Integer page, Integer size) {
+        StringBuilder select = new StringBuilder("SELECT DISTINCT p FROM ProfileEntity p ");
+        StringBuilder count = new StringBuilder("SELECT COUNT(DISTINCT p) FROM ProfileEntity p ");
         Map<String, Object> params = new HashMap<>();
         StringBuilder filter = new StringBuilder(" WHERE p.visible=true ");
 
@@ -63,7 +63,7 @@ public class CustomProfileRepository {
                 params,
                 page,
                 size,
-                Profile.class);
+                ProfileEntity.class);
 
     }
 }

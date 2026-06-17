@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.news.dto.section.SectionRequestDTO;
 import top.news.dto.section.SectionResponseDTO;
-import top.news.entity.Section;
+import top.news.entity.SectionEntity;
 import top.news.enums.AppLanguage;
 import top.news.service.SectionService;
 
@@ -42,8 +42,8 @@ public class SectionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<Page<Section>> list(@RequestParam(name = "page", defaultValue = "1") Integer page,
-                                              @RequestParam(name = "size", defaultValue = "5") Integer size){
+    public ResponseEntity<Page<SectionEntity>> list(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                    @RequestParam(name = "size", defaultValue = "5") Integer size){
         return ResponseEntity.ok(sectionService.getSectionList(page-1, size));
     }
 

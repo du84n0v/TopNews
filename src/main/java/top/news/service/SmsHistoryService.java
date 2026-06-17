@@ -2,7 +2,7 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.news.entity.SmsHistory;
+import top.news.entity.SmsHistoryEntity;
 import top.news.repository.SmsHistoryRepository;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class SmsHistoryService {
     }
 
     public void save(String phone, String message) {
-        SmsHistory history = new SmsHistory();
+        SmsHistoryEntity history = new SmsHistoryEntity();
         history.setPhone(phone);
         history.setMessage(message);
         history.setCreatedDate(LocalDateTime.now());

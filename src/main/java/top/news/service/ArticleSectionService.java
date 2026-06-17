@@ -3,7 +3,7 @@ package top.news.service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.news.entity.ArticleSection;
+import top.news.entity.ArticleSectionEntity;
 import top.news.repository.ArticleSectionRepository;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class ArticleSectionService {
         deleteAllByArticleId(articleId);
 
         for (Integer id : sectionIdList) {
-            ArticleSection articleSection = new ArticleSection();
+            ArticleSectionEntity articleSection = new ArticleSectionEntity();
             articleSection.setArticleId(articleId);
             articleSection.setSectionId(id);
             articleSectionRepository.save(articleSection);

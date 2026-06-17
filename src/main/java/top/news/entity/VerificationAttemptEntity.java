@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "verification_attempt")
-public class VerificationAttempt {
+public class VerificationAttemptEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

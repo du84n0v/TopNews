@@ -9,7 +9,7 @@ import top.news.enums.ProfileRoleEnum;
 @Setter
 @Entity
 @Table(name = "profile_role")
-public class ProfileRole {
+public class ProfileRoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,7 +18,7 @@ public class ProfileRole {
     private Integer profileId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false, nullable = false)
-    private Profile profile;
+    private ProfileEntity profile;
 
     @Enumerated(EnumType.STRING)
     private ProfileRoleEnum role;

@@ -1,9 +1,9 @@
 package top.news.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import top.news.entity.VerificationAttempt;
+import top.news.entity.VerificationAttemptEntity;
 
-public interface VerificationAttemptRepository extends CrudRepository<VerificationAttempt, Integer> {
+public interface VerificationAttemptRepository extends CrudRepository<VerificationAttemptEntity, Integer> {
 
-    VerificationAttempt findByUsername(String username);
+    VerificationAttemptEntity findByUsername(String username);
 }

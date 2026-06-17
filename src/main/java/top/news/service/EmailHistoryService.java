@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import top.news.dto.auth.MailMessageDTO;
-import top.news.entity.EmailHistory;
+import top.news.entity.EmailHistoryEntity;
 import top.news.repository.EmailHistoryRepository;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public class EmailHistoryService {
     private EmailHistoryRepository historyRepository;
 
     public void create(MailMessageDTO dto, String code) {
-        EmailHistory history = new EmailHistory();
+        EmailHistoryEntity history = new EmailHistoryEntity();
         history.setToEmail(dto.getToAccount());
         history.setSubject(dto.getSubject());
         history.setCode(code);
@@ -29,18 +29,18 @@ public class EmailHistoryService {
         historyRepository.save(history);
     }
 
-    public Page<EmailHistory> getHistoryByEmail(String email, Integer page, Integer size) {
+    public Page<EmailHistoryEntity> getHistoryByEmail(String email, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<EmailHistory> pages = historyRepository.findAllByToEmailOrderByCreatedDateDesc(email, pageable);
+        Page<EmailHistoryEntity> pages = historyRepository.findAllByToEmailOrderByCreatedDateDesc(email, pageable);
 
         return new PageImpl<>(pages.getContent(), pageable, pages.getTotalElements());
     }
 
-    public Page<EmailHistory> getHistoryByDate(LocalDate date, Integer page, Integer size) {
+    public Page<EmailHistoryEntity> getHistoryByDate(LocalDate date, Integer page, Integer size) {
         LocalDateTime fromDate = date.atStartOfDay();
         LocalDateTime toDate = date.atTime(LocalTime.MAX);
         Pageable pageable = PageRequest.of(page, size);
-        Page<EmailHistory> pages = historyRepository.findByCreatedDateBetweenOrderByCreatedDateDesc(fromDate, toDate, pageable);
+        Page<EmailHistoryEntity> pages = historyRepository.findByCreatedDateBetweenOrderByCreatedDateDesc(fromDate, toDate, pageable);
 
         return new PageImpl<>(pages.getContent(), pageable, pages.getTotalElements());
     }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.news.dto.region.RegionRequestDTO;
 import top.news.dto.region.RegionResponseDTO;
-import top.news.entity.Region;
+import top.news.entity.RegionEntity;
 import top.news.enums.AppLanguage;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -23,11 +23,11 @@ public class RegionService {
     private RegionRepository regionRepository;
 
     public String saveRegion(RegionRequestDTO dto) {
-        Optional<Region> optional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        Optional<RegionEntity> optional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(optional.isPresent()){
             throw new AppBadRequestException("Key already exists");
         }
-        Region region = save(dto);
+        RegionEntity region = save(dto);
         region.setVisible(Boolean.TRUE);
         region.setCreatedDate(LocalDateTime.now());
 
@@ -37,15 +37,15 @@ public class RegionService {
     }
 
     public String updateById(Integer regionId, RegionRequestDTO dto) {
-        Optional<Region> optional = regionRepository.findByIdAndVisibleTrue(regionId);
+        Optional<RegionEntity> optional = regionRepository.findByIdAndVisibleTrue(regionId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Region not found");
+            throw new ItemNotFoundException("RegionEntity not found");
         }
-        Optional<Region> keyOptional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        Optional<RegionEntity> keyOptional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(keyOptional.isPresent() && !regionId.equals(keyOptional.get().getId())){
             throw new AppBadRequestException("Key already exists");
         }
-        Region region = save(dto);
+        RegionEntity region = save(dto);
         region.setId(regionId);
         region.setVisible(Boolean.TRUE);
         region.setCreatedDate(optional.get().getCreatedDate());
@@ -54,8 +54,8 @@ public class RegionService {
         return "Successfully updated";
     }
 
-    private Region save(RegionRequestDTO dto){
-        Region region = new Region();
+    private RegionEntity save(RegionRequestDTO dto){
+        RegionEntity region = new RegionEntity();
         region.setOrderNumber(dto.getOrderNumber());
         region.setNameUz(dto.getNameUz());
         region.setNameRu(dto.getNameRu());
@@ -65,18 +65,18 @@ public class RegionService {
     }
 
     public String deleteRegion(Integer regionId) {
-        Optional<Region> optional = regionRepository.findByIdAndVisibleTrue(regionId);
+        Optional<RegionEntity> optional = regionRepository.findByIdAndVisibleTrue(regionId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Region is not found");
+            throw new ItemNotFoundException("RegionEntity is not found");
         }
         return (regionRepository.delete(regionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
-    public List<Region> getList() {
-        Iterable<Region> regions = regionRepository.findAllByVisibleTrue();
+    public List<RegionEntity> getList() {
+        Iterable<RegionEntity> regions = regionRepository.findAllByVisibleTrue();
 
-        List<Region> response = new LinkedList<>();
-        for (Region region : regions) {
+        List<RegionEntity> response = new LinkedList<>();
+        for (RegionEntity region : regions) {
             response.add(region);
         }
         return response;

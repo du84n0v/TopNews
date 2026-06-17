@@ -1,7 +1,7 @@
 package top.news.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import top.news.entity.SavedArticle;
+import top.news.entity.SavedArticleEntity;
 
-public interface SavedArticleRepository extends CrudRepository<SavedArticle, Integer> {
+public interface SavedArticleRepository extends CrudRepository<SavedArticleEntity, Integer> {
 }

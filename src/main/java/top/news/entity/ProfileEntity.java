@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "profile")
-public class Profile {
+public class ProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -44,5 +44,5 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER
     )
-    List<ProfileRole> roles;
+    List<ProfileRoleEntity> roles;
 }

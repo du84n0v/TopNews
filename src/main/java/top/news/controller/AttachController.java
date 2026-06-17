@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import top.news.dto.attach.AttachDTO;
@@ -37,6 +38,7 @@ public class AttachController {
                 .body(resource);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/pagination")
     public ResponseEntity<Page<AttachDTO>> pagination(@RequestParam(name = "page", defaultValue = "1") Integer page,
                                                      @RequestParam(name = "size", defaultValue = "2") Integer size){

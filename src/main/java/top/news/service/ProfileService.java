@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.news.dto.profile.*;
-import top.news.entity.Profile;
+import top.news.entity.ProfileEntity;
 import top.news.enums.ProfileRoleEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -36,11 +36,11 @@ public class ProfileService {
     private AttachService attachService;
 
     public ProfileResponseDTO save(ProfileRequestDTO dto) {
-        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
+        Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(optional.isPresent()){
             throw new AppBadRequestException("User already exists");
         }
-        Profile profile = new Profile();
+        ProfileEntity profile = new ProfileEntity();
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
@@ -57,11 +57,11 @@ public class ProfileService {
     }
 
     public ProfileResponseDTO getById(Integer profileId) {
-        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Profile not found");
+            throw new ItemNotFoundException("ProfileEntity not found");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         ProfileResponseDTO response = new ProfileResponseDTO();
         response.setName(profile.getName());
         response.setSurname(profile.getSurname());
@@ -73,11 +73,11 @@ public class ProfileService {
     }
 
     public String updateProfileById(Integer profileId, ProfileDetailUpdateDTO dto) {
-        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Profile is not found");
+            throw new ItemNotFoundException("ProfileEntity is not found");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
 
@@ -88,7 +88,7 @@ public class ProfileService {
 
     public PageImpl<ProfileResponseDTO> getProfileList(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Profile> pages = profileRepository.findAllByVisibleTrue(pageRequest);
+        Page<ProfileEntity> pages = profileRepository.findAllByVisibleTrue(pageRequest);
 
         List<ProfileResponseDTO> response = pages.stream()
                 .map(p -> toResponseDTO(p, profileRoleService.getProfileRolesById(p.getId())))
@@ -98,7 +98,7 @@ public class ProfileService {
 
     public String deleteByProfileId(Integer profileId) {
         if(profileRepository.findByIdAndVisibleTrue(profileId).isEmpty()){
-            throw new ItemNotFoundException("Profile is not found");
+            throw new ItemNotFoundException("ProfileEntity is not found");
         }
         int result = profileRepository.updateVisible(profileId);
 
@@ -106,15 +106,15 @@ public class ProfileService {
     }
 
     public ProfileResponseDTO updateProfile(Integer profileId, ProfileRequestDTO dto) {
-        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Profile not found");
+            throw new ItemNotFoundException("ProfileEntity not found");
         }
-        Optional<Profile> usernameOptional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
+        Optional<ProfileEntity> usernameOptional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(usernameOptional.isPresent() && !profileId.equals(usernameOptional.get().getId())){
             throw new AppBadRequestException("Username belong to other user");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
@@ -128,11 +128,11 @@ public class ProfileService {
     }
 
     public String updateDetail(Integer profileId, ProfileDetailUpdateDTO dto) {
-        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Profile not foud");
+            throw new ItemNotFoundException("ProfileEntity not foud");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profileRepository.save(profile);
@@ -140,11 +140,11 @@ public class ProfileService {
     }
 
     public String updatePassword(Integer profileId, ProfileUpdatePasswordDTO pDto) {
-        Optional<Profile> optional = profileRepository.findByIdAndVisibleTrue(profileId);
+        Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Profile not found");
+            throw new ItemNotFoundException("ProfileEntity not found");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         if(!passwordEncoder.matches(pDto.getCurrentPassword(), profile.getPassword())){
             throw new AppBadRequestException("Current password is wrong");
         }
@@ -159,7 +159,7 @@ public class ProfileService {
     }
 
     public PageImpl<ProfileResponseDTO> filter(ProfileFilterDTO dto, Integer page, Integer size) {
-        Page<Profile> profiles = customProfileRepository.filter(dto, page, size);
+        Page<ProfileEntity> profiles = customProfileRepository.filter(dto, page, size);
 
 
         List<ProfileResponseDTO> response = profiles.stream()
@@ -168,7 +168,7 @@ public class ProfileService {
         return new PageImpl<>(response, PageRequest.of(page, size), profiles.getTotalElements());
     }
 
-    private ProfileResponseDTO toResponseDTO(Profile profile, List<ProfileRoleEnum> roles){
+    private ProfileResponseDTO toResponseDTO(ProfileEntity profile, List<ProfileRoleEnum> roles){
         ProfileResponseDTO response = new ProfileResponseDTO();
         if(profile.getId() != null) response.setId(profile.getId());
         if(profile.getName() != null) response.setName(profile.getName());

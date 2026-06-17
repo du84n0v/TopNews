@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.news.dto.category.CategoryRequestDTO;
 import top.news.dto.category.CategoryResponseDTO;
-import top.news.entity.Category;
+import top.news.entity.CategoryEntity;
 import top.news.enums.AppLanguage;
 import top.news.service.CategoryService;
 
@@ -41,7 +41,7 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<List<Category>> list(){
+    public ResponseEntity<List<CategoryEntity>> list(){
         return ResponseEntity.ok(categoryService.getCategoryList());
     }
 

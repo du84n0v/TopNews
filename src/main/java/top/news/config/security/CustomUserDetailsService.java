@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import top.news.entity.Profile;
-import top.news.entity.ProfileRole;
+import top.news.entity.ProfileEntity;
+import top.news.entity.ProfileRoleEntity;
 import top.news.enums.ProfileRoleEnum;
 import top.news.exception.ItemNotFoundException;
 import top.news.repository.ProfileRepository;
@@ -24,13 +24,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("loadUsername: " + username);
-        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(username);
+        Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(username);
         if(optional.isEmpty()){
             throw new ItemNotFoundException("User not found");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         List<ProfileRoleEnum> roleEnums = new ArrayList<>();
-        for (ProfileRole role : profile.getRoles()) {
+        for (ProfileRoleEntity role : profile.getRoles()) {
             roleEnums.add(role.getRole());
         }
         return new CustomUserDetails(

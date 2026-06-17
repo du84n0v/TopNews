@@ -11,7 +11,7 @@ import top.news.dto.article.ArticleFilterDTO;
 import top.news.dto.article.ArticleRequestDTO;
 import top.news.dto.article.ArticleShortInfoDTO;
 import top.news.dto.article.ArticleStatusDTO;
-import top.news.entity.Article;
+import top.news.entity.ArticleEntity;
 import top.news.enums.ArticleStatusEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -43,7 +43,7 @@ public class ArticleService {
     private AttachService attachService;
 
     public ArticleShortInfoDTO createArticle(ArticleRequestDTO dto) {
-        Article article = dtoToEntity(dto);
+        ArticleEntity article = dtoToEntity(dto);
         article.setModeratorId(SpringSecurityUtil.getCurrentProfileId());
 
         articleRepository.save(article);
@@ -57,11 +57,11 @@ public class ArticleService {
 
     @Transactional
     public ArticleShortInfoDTO updateArticle(String articleId, ArticleRequestDTO dto) {
-        Optional<Article> optional = articleRepository.findByIdAndVisibleTrue(articleId);
+        Optional<ArticleEntity> optional = articleRepository.findByIdAndVisibleTrue(articleId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Article not foud");
+            throw new ItemNotFoundException("ArticleEntity not foud");
         }
-        Article article = optional.get();
+        ArticleEntity article = optional.get();
         if(!article.getModeratorId().equals(SpringSecurityUtil.getCurrentProfileId())){
             throw new AppBadRequestException("This is not your article");
         }
@@ -88,7 +88,7 @@ public class ArticleService {
         if(effRow > 0){
             return "Successfully deleted";
         }
-        throw new ItemNotFoundException("Article not found");
+        throw new ItemNotFoundException("ArticleEntity not found");
     }
 
     public String changeArticleStatus(String articleId, ArticleStatusDTO dto) {
@@ -97,7 +97,7 @@ public class ArticleService {
         if(effRow > 0){
             return "Successfully changed";
         }
-        throw new ItemNotFoundException("Article not found");
+        throw new ItemNotFoundException("ArticleEntity not found");
     }
 
     public Page<ArticleShortInfoDTO> getLastNArticleBySectionId(Integer sectionId, int page, Integer size) {
@@ -164,7 +164,7 @@ public class ArticleService {
             return articleRepository.findViewCountById(articleId);
         }
         else{
-            throw new ItemNotFoundException("Article not found");
+            throw new ItemNotFoundException("ArticleEntity not found");
         }
     }
 
@@ -174,7 +174,7 @@ public class ArticleService {
             return articleRepository.findShareCountById(articleId);
         }
         else {
-            throw new ItemNotFoundException("Article not found");
+            throw new ItemNotFoundException("ArticleEntity not found");
         }
     }
 
@@ -202,7 +202,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
     }
 
-    private ArticleShortInfoDTO entityToShortDto(Article article) {
+    private ArticleShortInfoDTO entityToShortDto(ArticleEntity article) {
         ArticleShortInfoDTO response = new ArticleShortInfoDTO();
         response.setArticleId(article.getId());
         response.setTitle(article.getTitle());
@@ -213,8 +213,8 @@ public class ArticleService {
         return response;
     }
 
-    private Article dtoToEntity(ArticleRequestDTO dto) {
-        Article article = new Article();
+    private ArticleEntity dtoToEntity(ArticleRequestDTO dto) {
+        ArticleEntity article = new ArticleEntity();
         article.setTitle(dto.getTitle());
         article.setDescription(dto.getDescription());
         article.setContent(dto.getContent());

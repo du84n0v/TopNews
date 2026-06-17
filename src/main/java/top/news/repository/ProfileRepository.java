@@ -6,21 +6,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import top.news.entity.Profile;
-import top.news.enums.ProfileStatusEnum;
+import top.news.entity.ProfileEntity;
 
 import java.util.Optional;
 
-public interface ProfileRepository extends CrudRepository<Profile, Integer> {
+public interface ProfileRepository extends CrudRepository<ProfileEntity, Integer> {
 
-    Optional<Profile> findByUsernameAndVisibleTrue(String username);
+    Optional<ProfileEntity> findByUsernameAndVisibleTrue(String username);
 
-    Optional<Profile> findByIdAndVisibleTrue(Integer profileId);
+    Optional<ProfileEntity> findByIdAndVisibleTrue(Integer profileId);
 
-    Page<Profile> findAllByVisibleTrue(Pageable pageable);
+    Page<ProfileEntity> findAllByVisibleTrue(Pageable pageable);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Profile p SET p.visible=false WHERE p.id =?1")
+    @Query("UPDATE ProfileEntity p SET p.visible=false WHERE p.id =?1")
     int updateVisible(Integer profileId);
 }

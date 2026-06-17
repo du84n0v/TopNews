@@ -17,8 +17,8 @@ public class CustomArticleRepository {
     private QueryPagination queryPagination;
 
     public Page<Object[]> filter(ArticleFilterDTO dto, Integer page, Integer size) {
-        StringBuilder select = new StringBuilder("SELECT a.id, a.title, a.description,a.imageId, a.publishedDate FROM Article a ");
-        StringBuilder count = new StringBuilder("SELECT COUNT(DISTINCT a) FROM Article a ");
+        StringBuilder select = new StringBuilder("SELECT a.id, a.title, a.description,a.imageId, a.publishedDate FROM ArticleEntity a ");
+        StringBuilder count = new StringBuilder("SELECT COUNT(DISTINCT a) FROM ArticleEntity a ");
         Map<String, Object> params = new HashMap<>();
         StringBuilder filter = new StringBuilder(" WHERE a.visible=true ");
 
@@ -28,15 +28,15 @@ public class CustomArticleRepository {
         }
 
         if(dto.getCategoryId() != null){
-            select.append(" INNER JOIN ArticleCategory ac on a.id = ac.articleId ");
-            count.append(" INNER JOIN ArticleCategory ac on a.id = ac.articleId ");
+            select.append(" INNER JOIN ArticleCategoryEntity ac on a.id = ac.articleId ");
+            count.append(" INNER JOIN ArticleCategoryEntity ac on a.id = ac.articleId ");
 
             filter.append(" AND ac.categoryId = :categoryId ");
             params.put("categoryId", dto.getCategoryId());
         }
         if(dto.getSectionId() != null){
-            select.append(" INNER JOIN ArticleSection ss on ss.articleId = a.id ");
-            count.append(" INNER JOIN ArticleSection ss on ss.articleId = a.id ");
+            select.append(" INNER JOIN ArticleSectionEntity ss on ss.articleId = a.id ");
+            count.append(" INNER JOIN ArticleSectionEntity ss on ss.articleId = a.id ");
 
             filter.append(" AND ss.sectionId = :sectionId ");
             params.put("sectionId", dto.getSectionId());

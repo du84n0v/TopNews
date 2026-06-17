@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import top.news.dto.section.SectionRequestDTO;
 import top.news.dto.section.SectionResponseDTO;
-import top.news.entity.Section;
+import top.news.entity.SectionEntity;
 import top.news.enums.AppLanguage;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -27,11 +27,11 @@ public class SectionService {
     private SectionRepository sectionRepository;
 
     public String createSection(SectionRequestDTO dto) {
-        Optional<Section> optional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        Optional<SectionEntity> optional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(optional.isPresent()){
-            throw new AppBadRequestException("Section key already exists");
+            throw new AppBadRequestException("SectionEntity key already exists");
         }
-        Section section = save(dto);
+        SectionEntity section = save(dto);
         section.setVisible(Boolean.TRUE);
         section.setCreatedDate(LocalDateTime.now());
 
@@ -40,8 +40,8 @@ public class SectionService {
         return "Successfully created";
     }
 
-    private Section save(SectionRequestDTO dto) {
-        Section section = new Section();
+    private SectionEntity save(SectionRequestDTO dto) {
+        SectionEntity section = new SectionEntity();
         section.setOrderNumber(dto.getOrderNumber());
         section.setNameUz(dto.getNameUz());
         section.setNameRu(dto.getNameRu());
@@ -51,15 +51,15 @@ public class SectionService {
     }
 
     public String updateSectionById(Integer sectionId, SectionRequestDTO dto) {
-        Optional<Section> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
+        Optional<SectionEntity> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Category not found");
+            throw new ItemNotFoundException("CategoryEntity not found");
         }
-        Optional<Section> keyOptional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
+        Optional<SectionEntity> keyOptional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(keyOptional.isPresent() && !sectionId.equals(keyOptional.get().getId())){
-            throw new AppBadRequestException("Section key belong to other section");
+            throw new AppBadRequestException("SectionEntity key belong to other section");
         }
-        Section section = save(dto);
+        SectionEntity section = save(dto);
         section.setId(sectionId);
         section.setVisible(Boolean.TRUE);
         section.setCreatedDate(optional.get().getCreatedDate());
@@ -69,19 +69,19 @@ public class SectionService {
     }
 
     public String deleteSectionById(Integer sectionId) {
-        Optional<Section> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
+        Optional<SectionEntity> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Category is not found");
+            throw new ItemNotFoundException("CategoryEntity is not found");
         }
         return (sectionRepository.delete(sectionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
-    public Page<Section> getSectionList(Integer page, Integer size) {
+    public Page<SectionEntity> getSectionList(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Section> sections = sectionRepository.findAllByVisibleTrue(pageable);
+        Page<SectionEntity> sections = sectionRepository.findAllByVisibleTrue(pageable);
 
-        List<Section> response = new LinkedList<>();
-        for (Section section : sections) {
+        List<SectionEntity> response = new LinkedList<>();
+        for (SectionEntity section : sections) {
             response.add(section);
         }
         return new PageImpl<>(response, PageRequest.of(page, size), sections.getTotalElements());

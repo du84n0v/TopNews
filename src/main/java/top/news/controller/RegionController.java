@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.news.dto.region.RegionRequestDTO;
 import top.news.dto.region.RegionResponseDTO;
-import top.news.entity.Region;
+import top.news.entity.RegionEntity;
 import top.news.enums.AppLanguage;
 import top.news.service.RegionService;
 
@@ -41,7 +41,7 @@ public class RegionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<List<Region>> list(){
+    public ResponseEntity<List<RegionEntity>> list(){
         return ResponseEntity.ok(regionService.getList());
     }
 

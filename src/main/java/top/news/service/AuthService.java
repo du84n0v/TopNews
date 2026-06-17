@@ -15,9 +15,9 @@ import top.news.dto.auth.RegistrationDTO;
 import top.news.dto.auth.VerificationDTO;
 import top.news.dto.profile.ProfileResponseDTO;
 import top.news.dto.security.JwtDTO;
-import top.news.entity.EmailHistory;
-import top.news.entity.Profile;
-import top.news.entity.VerificationAttempt;
+import top.news.entity.EmailHistoryEntity;
+import top.news.entity.ProfileEntity;
+import top.news.entity.VerificationAttemptEntity;
 import top.news.enums.ProfileRoleEnum;
 import top.news.enums.ProfileStatusEnum;
 import top.news.exception.AppBadRequestException;
@@ -55,9 +55,9 @@ public class AuthService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public String register(RegistrationDTO dto) {
-        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
+        Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(optional.isPresent()) {
-            Profile profile = optional.get();
+            ProfileEntity profile = optional.get();
             if (profile.getStatus().equals(ProfileStatusEnum.NOT_ACTIVE)) {
                 profileRoleService.deleteProfileRoles(profile.getId());
                 profileRepository.delete(profile);
@@ -65,7 +65,7 @@ public class AuthService {
                 throw new AppBadRequestException("Email or Phone already exists");
             }
         }
-        Profile profile = new Profile();
+        ProfileEntity profile = new ProfileEntity();
         profile.setName(dto.getName());
         profile.setSurname(dto.getSurname());
         profile.setUsername(dto.getUsername());
@@ -84,7 +84,7 @@ public class AuthService {
         else{
             smsSenderService.sendSms(profile.getUsername());
         }
-        VerificationAttempt attempt = new VerificationAttempt();
+        VerificationAttemptEntity attempt = new VerificationAttemptEntity();
         attempt.setUsername(dto.getUsername());
         attempt.setAttemptCount(0);
         attempt.setLastAttempt(LocalDateTime.now());
@@ -97,9 +97,9 @@ public class AuthService {
     @Transactional
     public String verify(VerificationDTO dto) {
         LocalDateTime now = LocalDateTime.now();
-        VerificationAttempt attempt = attemptRepository.findByUsername(dto.getUsername());
+        VerificationAttemptEntity attempt = attemptRepository.findByUsername(dto.getUsername());
         if(attempt == null){
-            VerificationAttempt verificationAttempt = new VerificationAttempt();
+            VerificationAttemptEntity verificationAttempt = new VerificationAttemptEntity();
             verificationAttempt.setUsername(dto.getUsername());
             verificationAttempt.setAttemptCount(0);
             attempt = attemptRepository.save(verificationAttempt);
@@ -115,7 +115,7 @@ public class AuthService {
             }
         }
 
-        EmailHistory lastCode = emailHistoryRepository.findTopByToEmailOrderByCreatedDateDesc(dto.getUsername());
+        EmailHistoryEntity lastCode = emailHistoryRepository.findTopByToEmailOrderByCreatedDateDesc(dto.getUsername());
         if(lastCode != null && lastCode.getCreatedDate().plusMinutes(2).isBefore(now)){
             throw new AppBadRequestException("Code is expired. Please click resend to get new code");
         }
@@ -128,11 +128,11 @@ public class AuthService {
             throw new AppBadRequestException("Wrong code: " + (remaining > 0 ? remaining + "-attempt left" : "Please try 2 minutes later"));
         }
 
-        Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
+        Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(optional.isEmpty()) {
             throw new ItemNotFoundException("User not found");
         }
-        Profile profile = optional.get();
+        ProfileEntity profile = optional.get();
         profile.setStatus(ProfileStatusEnum.ACTIVE);
         profileRepository.save(profile);
 
@@ -144,9 +144,9 @@ public class AuthService {
     public String resend(String email) {
         LocalDateTime now = LocalDateTime.now();
 
-        VerificationAttempt attempt = attemptRepository.findByUsername(email);
+        VerificationAttemptEntity attempt = attemptRepository.findByUsername(email);
         if(attempt == null){
-            VerificationAttempt verificationAttempt = new VerificationAttempt();
+            VerificationAttemptEntity verificationAttempt = new VerificationAttemptEntity();
             verificationAttempt.setUsername(email);
             verificationAttempt.setResendCount(1);
             verificationAttempt.setLastResendTime(now);

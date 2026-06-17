@@ -5,24 +5,24 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import top.news.entity.Category;
+import top.news.entity.CategoryEntity;
 import top.news.mapper.CategoryMapper;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CategoryRepository extends CrudRepository<Category , Integer> {
+public interface CategoryRepository extends CrudRepository<CategoryEntity, Integer> {
 
-    Optional<Category> findByIdAndVisibleTrue(Integer categoryId);
+    Optional<CategoryEntity> findByIdAndVisibleTrue(Integer categoryId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Category c SET c.visible=false WHERE c.id =?1")
+    @Query("UPDATE CategoryEntity c SET c.visible=false WHERE c.id =?1")
     int delete(Integer categoryId);
 
-    Iterable<Category> findAllByVisibleTrue();
+    Iterable<CategoryEntity> findAllByVisibleTrue();
 
-    Optional<Category> findByKeyAndVisibleTrue(String key);
+    Optional<CategoryEntity> findByKeyAndVisibleTrue(String key);
 
     @Query("SELECT c.id AS id, c.key AS key, " +
             " CASE :lang " +
@@ -30,7 +30,7 @@ public interface CategoryRepository extends CrudRepository<Category , Integer> {
             " WHEN 'RU' THEN c.nameRu " +
             " WHEN 'EN' THEN c.nameEn " +
             "END AS name " +
-            " FROM Category c " +
+            " FROM CategoryEntity c " +
             " WHERE c.visible=true ORDER BY c.orderNumber ASC")
     List<CategoryMapper> findByLang(@Param("lang") String lang);
 }

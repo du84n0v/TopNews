@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.news.dto.category.CategoryRequestDTO;
 import top.news.dto.category.CategoryResponseDTO;
-import top.news.entity.Category;
+import top.news.entity.CategoryEntity;
 import top.news.enums.AppLanguage;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -23,11 +23,11 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public String createCategory(CategoryRequestDTO dto) {
-        Optional<Category> optional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
+        Optional<CategoryEntity> optional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(optional.isPresent()){
-            throw new AppBadRequestException("Category key already exists");
+            throw new AppBadRequestException("CategoryEntity key already exists");
         }
-        Category category = save(dto);
+        CategoryEntity category = save(dto);
         category.setVisible(Boolean.TRUE);
         category.setCreatedDate(LocalDateTime.now());
 
@@ -36,8 +36,8 @@ public class CategoryService {
         return "Successfully created";
     }
 
-    private Category save(CategoryRequestDTO dto) {
-        Category category = new Category();
+    private CategoryEntity save(CategoryRequestDTO dto) {
+        CategoryEntity category = new CategoryEntity();
         category.setOrderNumber(dto.getOrderNumber());
         category.setNameUz(dto.getNameUz());
         category.setNameRu(dto.getNameRu());
@@ -47,16 +47,16 @@ public class CategoryService {
     }
 
     public String updateCategoryById(Integer categoryId, CategoryRequestDTO dto) {
-        Optional<Category> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
+        Optional<CategoryEntity> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Category not found");
+            throw new ItemNotFoundException("CategoryEntity not found");
         }
 
-        Optional<Category> keyOptional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
+        Optional<CategoryEntity> keyOptional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(keyOptional.isPresent() && !categoryId.equals(keyOptional.get().getId())){
-            throw new AppBadRequestException("Category presents");
+            throw new AppBadRequestException("CategoryEntity presents");
         }
-        Category category = save(dto);
+        CategoryEntity category = save(dto);
         category.setId(optional.get().getId());
         category.setVisible(Boolean.TRUE);
         category.setCreatedDate(optional.get().getCreatedDate());
@@ -67,19 +67,19 @@ public class CategoryService {
     }
 
     public String deleteCategoryById(Integer categoryId) {
-        Optional<Category> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
+        Optional<CategoryEntity> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
         if(optional.isEmpty()){
-            throw new ItemNotFoundException("Category is not found");
+            throw new ItemNotFoundException("CategoryEntity is not found");
         }
 
         return (categoryRepository.delete(categoryId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
-    public List<Category> getCategoryList() {
-        Iterable<Category> categories = categoryRepository.findAllByVisibleTrue();
+    public List<CategoryEntity> getCategoryList() {
+        Iterable<CategoryEntity> categories = categoryRepository.findAllByVisibleTrue();
 
-        List<Category> response = new LinkedList<>();
-        for (Category category : categories) {
+        List<CategoryEntity> response = new LinkedList<>();
+        for (CategoryEntity category : categories) {
             response.add(category);
         }
         return response;
