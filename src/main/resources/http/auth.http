@@ -37,7 +37,7 @@ POST localhost:8080/auth/verify
 Content-Type: application/json
 
 {
-  "username": "kumbay64@gmail.com",
+  "username": "muslim@gmail.com",
   "code": "212393"
 }
 
@@ -49,8 +49,8 @@ GET localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "kumbay64@gmail.com",
-  "password": "54321"
+  "username": "muslim@gmail.com",
+  "password": "muslim"
 }
 
 ###login

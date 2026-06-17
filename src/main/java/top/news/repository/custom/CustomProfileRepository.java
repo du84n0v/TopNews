@@ -1,10 +1,7 @@
 package top.news.repository.custom;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import top.news.dto.profile.ProfileFilterDTO;
 import top.news.entity.Profile;
@@ -12,16 +9,15 @@ import top.news.entity.Profile;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Repository
-public class ProfileCustomRepository {
+public class CustomProfileRepository {
 
     @Autowired
-    private EntityManager entityManager;
+    private QueryPagination queryPagination;
 
-    public PageImpl<Profile> filter(ProfileFilterDTO dto, Integer page, Integer size) {
+    public Page<Profile> filter(ProfileFilterDTO dto, Integer page, Integer size) {
         StringBuilder select = new StringBuilder("SELECT DISTINCT p FROM Profile p ");
         StringBuilder count = new StringBuilder("SELECT COUNT(DISTINCT p) FROM Profile p ");
         Map<String, Object> params = new HashMap<>();
@@ -61,17 +57,13 @@ public class ProfileCustomRepository {
         select.append(filter);
         count.append(filter);
 
-        Query selectQuery = entityManager.createQuery(select.toString());
-        selectQuery.setFirstResult(page*size);
-        selectQuery.setMaxResults(size);
-        params.forEach(selectQuery::setParameter);
+        return queryPagination.getPaginationResult(
+                select.toString(),
+                count.toString(),
+                params,
+                page,
+                size,
+                Profile.class);
 
-        Query countQuery = entityManager.createQuery(count.toString());
-        params.forEach(countQuery::setParameter);
-
-        List<Profile> profiles = selectQuery.getResultList();
-        Long totalProfiles = (Long) countQuery.getSingleResult();
-
-        return new PageImpl<>(profiles, PageRequest.of(page, size), totalProfiles);
     }
 }

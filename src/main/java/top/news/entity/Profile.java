@@ -40,8 +40,9 @@ public class Profile {
     private LocalDateTime createdDate;
 
     @Column(name = "photo_id")
-    private Integer photoId;
+    private String photoId;
 
-    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER
+    )
     List<ProfileRole> roles;
 }

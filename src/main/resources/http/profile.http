@@ -1,6 +1,8 @@
 ###create profile
 POST http://localhost:8080/profile/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNzEzNzY1LCJleHAiOjE3ODE3MTczNjV9.vQ611mzEM8LoePSdQB2HGtmTWQGVOsIPESFwghJgXMjZhXo2uNl5q2ecUofFqHyA
+
 
 {
   "name": "Ali",
@@ -8,20 +10,21 @@ Content-Type: application/json
   "username": "ali@gmail.com",
   "password": "ali123",
   "status": "ACTIVE",
-  "roleList": ["ROLE_MODERATOR"]
+  "roleList": ["ROLE_PUBLISHER"]
 }
 
 ###create profile
 POST http://localhost:8080/profile/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNzEzNzY1LCJleHAiOjE3ODE3MTczNjV9.vQ611mzEM8LoePSdQB2HGtmTWQGVOsIPESFwghJgXMjZhXo2uNl5q2ecUofFqHyA
 
 {
-  "name": "Sardor",
-  "surname": "Rahimov",
-  "username": "sardor@gmail.com",
-  "password": "sardor123",
+  "name": "Muslim",
+  "surname": "Tursunov",
+  "username": "muslim@gmail.com",
+  "password": "muslim",
   "status": "ACTIVE",
-  "roleList": ["ROLE_PUBLISHER"]
+  "roleList": ["ROLE_MODERATOR"]
 }
 
 ###create profile
@@ -38,6 +41,7 @@ Content-Type: application/json
 }
 
 ###get profile list
+
 GET localhost:8080/profile/list
 
 ###update admin
@@ -49,7 +53,7 @@ Content-Type: application/json
   "surname": "Valiyev",
   "username": "ali_new@gmail.com",
   "status": "BLOCKED",
-  "roleList": ["MODERATOR"]
+  "roleList": ["ROLE_MODERATOR"]
 }
 
 ###update delail

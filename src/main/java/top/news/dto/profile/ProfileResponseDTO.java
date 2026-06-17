@@ -3,6 +3,7 @@ package top.news.dto.profile;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+import top.news.dto.attach.AttachShortInfoDTO;
 import top.news.enums.ProfileRoleEnum;
 import top.news.enums.ProfileStatusEnum;
 
@@ -28,7 +29,7 @@ public class ProfileResponseDTO {
 
     private LocalDateTime createdDate;
 
-    private Integer photoId;
+    private AttachShortInfoDTO content;
 
     private String jwt;
 }

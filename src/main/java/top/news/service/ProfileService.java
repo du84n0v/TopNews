@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.news.dto.profile.*;
 import top.news.entity.Profile;
@@ -12,8 +13,7 @@ import top.news.enums.ProfileRoleEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
 import top.news.repository.ProfileRepository;
-import top.news.repository.custom.ProfileCustomRepository;
-import top.news.util.MD5Encode;
+import top.news.repository.custom.CustomProfileRepository;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -27,14 +27,18 @@ public class ProfileService {
     @Autowired
     private ProfileRoleService profileRoleService;
     @Autowired
-    private ProfileCustomRepository profileCustomRepository;
+    private CustomProfileRepository customProfileRepository;
     @Autowired
     private BCryptPasswordEncoder encoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AttachService attachService;
 
     public ProfileResponseDTO save(ProfileRequestDTO dto) {
         Optional<Profile> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(optional.isPresent()){
-            throw new AppBadRequestException("User exists");
+            throw new AppBadRequestException("User already exists");
         }
         Profile profile = new Profile();
         profile.setName(dto.getName());
@@ -50,20 +54,6 @@ public class ProfileService {
         profileRoleService.merge(profile.getId(), dto.getRoleList());
 
         return toResponseDTO(profile, dto.getRoleList());
-    }
-
-    public ProfileResponseDTO toResponseDTO(Profile profile, List<ProfileRoleEnum> roles){
-        ProfileResponseDTO response = new ProfileResponseDTO();
-        if(profile.getId() != null) response.setId(profile.getId());
-        if(profile.getName() != null) response.setName(profile.getName());
-        if(profile.getSurname() != null) response.setSurname(profile.getSurname());
-        if(profile.getUsername() != null) response.setUsername(profile.getUsername());
-        if(profile.getRoles() != null && !profile.getRoles().isEmpty()) response.setRoleList(roles);
-        if(profile.getStatus() != null) response.setStatus(profile.getStatus());
-        if(profile.getCreatedDate() != null) response.setCreatedDate(profile.getCreatedDate());
-        if(profile.getPhotoId() != null) response.setPhotoId(profile.getPhotoId());
-
-        return response;
     }
 
     public ProfileResponseDTO getById(Integer profileId) {
@@ -104,16 +94,6 @@ public class ProfileService {
                 .map(p -> toResponseDTO(p, profileRoleService.getProfileRolesById(p.getId())))
                 .toList();
         return new PageImpl<>(response, pageRequest, pages.getTotalElements());
-    }
-
-    public PageImpl<ProfileResponseDTO> studentFilter(ProfileFilterDTO dto, Integer page, Integer size) {
-        PageImpl<Profile> profiles = profileCustomRepository.filter(dto, page, size);
-
-
-        List<ProfileResponseDTO> response = profiles.stream()
-                .map(profile -> toResponseDTO(profile, profileRoleService.getProfileRolesById(profile.getId())))
-                .toList();
-        return new PageImpl<>(response, PageRequest.of(page, size), profiles.getTotalElements());
     }
 
     public String deleteByProfileId(Integer profileId) {
@@ -165,12 +145,41 @@ public class ProfileService {
             throw new ItemNotFoundException("Profile not found");
         }
         Profile profile = optional.get();
-        if(!profile.getPassword().equals(MD5Encode.encode(pDto.getCurrentPassword()))){
+        if(!passwordEncoder.matches(pDto.getCurrentPassword(), profile.getPassword())){
             throw new AppBadRequestException("Current password is wrong");
         }
-        profile.setPassword(MD5Encode.encode(pDto.getNewPassword()));
+        profile.setPassword(passwordEncoder.encode(pDto.getNewPassword()));
         profileRepository.save(profile);
 
         return "Successfully updated";
     }
+
+    public String updateProfilePhoto(ProfileUpdatePhotoDTO dto) {
+        return null;
+    }
+
+    public PageImpl<ProfileResponseDTO> filter(ProfileFilterDTO dto, Integer page, Integer size) {
+        Page<Profile> profiles = customProfileRepository.filter(dto, page, size);
+
+
+        List<ProfileResponseDTO> response = profiles.stream()
+                .map(profile -> toResponseDTO(profile, profileRoleService.getProfileRolesById(profile.getId())))
+                .toList();
+        return new PageImpl<>(response, PageRequest.of(page, size), profiles.getTotalElements());
+    }
+
+    private ProfileResponseDTO toResponseDTO(Profile profile, List<ProfileRoleEnum> roles){
+        ProfileResponseDTO response = new ProfileResponseDTO();
+        if(profile.getId() != null) response.setId(profile.getId());
+        if(profile.getName() != null) response.setName(profile.getName());
+        if(profile.getSurname() != null) response.setSurname(profile.getSurname());
+        if(profile.getUsername() != null) response.setUsername(profile.getUsername());
+        if(profile.getRoles() != null && !profile.getRoles().isEmpty()) response.setRoleList(roles);
+        if(profile.getStatus() != null) response.setStatus(profile.getStatus());
+        if(profile.getCreatedDate() != null) response.setCreatedDate(profile.getCreatedDate());
+        if(profile.getPhotoId() != null) response.setContent(attachService.openDTO(profile.getPhotoId()));
+
+        return response;
+    }
+
 }
