@@ -2,7 +2,9 @@ package top.news.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.news.dto.section.SectionRequestDTO;
 import top.news.dto.section.SectionResponseDTO;
@@ -19,25 +21,30 @@ public class SectionController {
     @Autowired
     private SectionService sectionService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<String> create(@Valid @RequestBody SectionRequestDTO dto){
         return ResponseEntity.ok(sectionService.createSection(dto));
     }
 
-    @PutMapping("/update-by-id/{sectionId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/by-id/{sectionId}")
     public ResponseEntity<String> updateById(@PathVariable Integer sectionId,
                                              @RequestBody SectionRequestDTO dto){
         return ResponseEntity.ok(sectionService.updateSectionById(sectionId, dto));
     }
 
-    @PutMapping("/detele-by-id/{sectionId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/detele/by-id/{sectionId}")
     public ResponseEntity<String> deleteById(@PathVariable Integer sectionId){
         return ResponseEntity.ok(sectionService.deleteSectionById(sectionId));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<List<Section>> list(){
-        return ResponseEntity.ok(sectionService.getSectionList());
+    public ResponseEntity<Page<Section>> list(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                              @RequestParam(name = "size", defaultValue = "5") Integer size){
+        return ResponseEntity.ok(sectionService.getSectionList(page-1, size));
     }
 
     @GetMapping("/by-lang")

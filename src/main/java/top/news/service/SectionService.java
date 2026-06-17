@@ -1,6 +1,10 @@
 package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import top.news.dto.section.SectionRequestDTO;
 import top.news.dto.section.SectionResponseDTO;
@@ -72,14 +76,15 @@ public class SectionService {
         return (sectionRepository.delete(sectionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
-    public List<Section> getSectionList() {
-        Iterable<Section> sections = sectionRepository.findAllByVisibleTrue();
+    public Page<Section> getSectionList(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Section> sections = sectionRepository.findAllByVisibleTrue(pageable);
 
         List<Section> response = new LinkedList<>();
         for (Section section : sections) {
             response.add(section);
         }
-        return response;
+        return new PageImpl<>(response, PageRequest.of(page, size), sections.getTotalElements());
     }
 
     public List<SectionResponseDTO> getSectionsByLang(AppLanguage lang) {

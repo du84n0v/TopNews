@@ -1,6 +1,8 @@
 package top.news.repository;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -20,7 +22,7 @@ public interface SectionRepository extends CrudRepository<Section, Integer> {
     @Query("UPDATE Section s SET s.visible=false WHERE s.id =?1")
     int delete(Integer sectionId);
 
-    Iterable<Section> findAllByVisibleTrue();
+    Page<Section> findAllByVisibleTrue(Pageable pageable);
 
     Optional<Section> findByKeyAndVisibleTrue(String key);
 
