@@ -45,6 +45,7 @@ public class AttachController {
         return ResponseEntity.ok(attachService.getContent(page-1, size));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{fileId}")
     public ResponseEntity<String> delete(@PathVariable String fileId){
         return ResponseEntity.ok(attachService.deleteContent(fileId));

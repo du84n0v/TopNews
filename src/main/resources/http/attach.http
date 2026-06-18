@@ -1,6 +1,7 @@
 ### createa attach
 POST http://localhost:8080/attaches/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="test.mp3"
@@ -8,8 +9,9 @@ Content-Disposition: form-data; name="file"; filename="test.mp3"
 < C:/Users/user/Downloads/fassounds-escape-your-love-upbeat-fashion-pop-dance-412230.mp3
 
 ### createa attach
-POST http://localhost:8080/attach/upload
+POST http://localhost:8080/attaches/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="resume.pdf"
@@ -20,7 +22,7 @@ Content-Disposition: form-data; name="file"; filename="resume.pdf"
 POST localhost:8080/attaches/upload
 
 ###open
-GET localhost:8080/attaches/open/0ba1d227-5f5e-48c2-9725-7bb47a4349e5.mp3
+GET localhost:8080/attaches/open/a9608411-49fb-4bec-a798-aea5a06787dc.pdf
 
 ###download
 GET localhost:8080/attaches/download/0ba1d22-5f5e-48c2-9725-7bb47a4349e5.mp3
@@ -32,7 +34,8 @@ GET localhost:8080/attaches/pagination?page=2&size=2
 DELETE localhost:8080/attaches/delete/0ba1d227-5f5e-48c2-9725-7bb47a4349e5.mp3
 
 ###delete
-DELETE localhost:8080/attaches/delete/1a8be1ab-c878-4bdf-88e0-3c789eb880d5.mp4
+DELETE localhost:8080/attaches/delete/a9608411-49fb-4bec-a798-aea5a06787dc.pdf
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 ###delete
 DELETE localhost:8080/attaches/delete/6fe3b766-20cd-46b1-bde6-fb343a81894d.mp4
