@@ -34,6 +34,7 @@ public class SpringConfig {
 
     public static final String[] AUTH_WHITELIST = {
             "/auth/**",
+            //articles
             "/article/last-n-by-section/{sectionId}",
             "/article/last-n-by-category/{categoryId}",
             "/article/last-n-by-region/{regionId}",
@@ -41,7 +42,11 @@ public class SpringConfig {
             "/article/most-read-except/{articleId}",
             "/article/increase-view-count-by-id/{articleId}",
             "/article/increase-share-count-by-id/{articleId}",
-            "/article/filter"
+            "/article/filter",
+            //region, section, category
+            "/region/by-lang",
+            "/category/by-lang",
+            "/section/by-lang",
     };
 
     @Bean

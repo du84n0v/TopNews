@@ -1,6 +1,7 @@
 ###create Section
 POST http://localhost:8080/section/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 {
   "nameUz": "Asosiy",
@@ -13,6 +14,7 @@ Content-Type: application/json
 ###create Section
 POST http://localhost:8080/section/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 {
   "nameUz": "Dolzarb",
@@ -25,6 +27,7 @@ Content-Type: application/json
 ###create Section
 POST http://localhost:8080/section/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 {
   "nameUz": "Muharrir tanlovi",
@@ -36,10 +39,13 @@ Content-Type: application/json
 
 ###get Section list
 GET http://localhost:8080/section/list
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 ###update Section
-PUT http://localhost:8080/section/update-by-id/3
+PUT http://localhost:8080/section/update/by-id/3
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 {
   "nameUz": "Foto yangilik",
@@ -50,8 +56,9 @@ Content-Type: application/json
 }
 
 ###delet Section
-PUT http://localhost:8080/section/detele-by-id/3
+PUT http://localhost:8080/section/detele/by-id/3
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 ###get by lang
 GET http://localhost:8080/section/by-lang
-Accept-Language: UZ
+Accept-Language: EN

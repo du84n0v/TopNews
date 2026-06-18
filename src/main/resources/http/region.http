@@ -1,6 +1,8 @@
 ###create Region
 POST http://localhost:8080/region/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+#Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVXNlcm92Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sIm5hbWUiOiJVc2VyIiwiaWQiOjIsInN1YiI6Iis5OTg5OTEyMzQ1NjciLCJpYXQiOjE3ODE3NzEyMjgsImV4cCI6MTc4MTc3NDgyOH0.3PxUX23A2jioRi3Z2RcUzLZGAPMuJkimG2yav2uIPxueg4VplXOMQlCc3KHmcZLD
 
 {
   "nameUz": "Toshkent",
@@ -13,6 +15,8 @@ Content-Type: application/json
 ###create Region
 POST http://localhost:8080/region/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 {
   "nameUz": "Samarqand",
@@ -25,6 +29,8 @@ Content-Type: application/json
 ###create Region
 POST http://localhost:8080/region/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 {
   "nameUz": "Buxoro",
@@ -35,8 +41,10 @@ Content-Type: application/json
 }
 
 ###update Region
-PUT http://localhost:8080/region/update-by-id/1
+PUT http://localhost:8080/region/update/by-id/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 {
   "nameUz": "Surxondaryo",
@@ -47,11 +55,15 @@ Content-Type: application/json
 }
 
 ###delete Region
-PUT http://localhost:8080/region/delete-by-id/3
+PUT http://localhost:8080/region/delete/by-id/3
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 ###get Region List
 GET http://localhost:8080/region/list
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 ### get by lang
 GET http://localhost:8080/region/by-lang
-Accept-Language: RU
+Accept-Language: UZ

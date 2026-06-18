@@ -1,6 +1,8 @@
 ###create Category
 POST http://localhost:8080/category/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 {
   "nameUz": "Sport",
@@ -13,6 +15,8 @@ Content-Type: application/json
 ###create category
 POST http://localhost:8080/category/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
+
 
 {
   "nameUz": "Jahon",
@@ -25,6 +29,7 @@ Content-Type: application/json
 ###create Category
 POST http://localhost:8080/category/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 {
   "nameUz": "Iqtisodiyot",
@@ -35,8 +40,9 @@ Content-Type: application/json
 }
 
 ###update Category
-PUT http://localhost:8080/category/update-by-id/1
+PUT http://localhost:8080/category/update/by-id/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 {
   "nameUz": "Texnologiya",
@@ -47,11 +53,13 @@ Content-Type: application/json
 }
 
 ###delete Category
-PUT http://localhost:8080/category/detele-by-id/3
+PUT http://localhost:8080/category/detele/by-id/3
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 ###Category List
 GET http://localhost:8080/category/list
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NzExODAsImV4cCI6MTc4MTc3NDc4MH0.n5Oy-1WluMITch-eGbvlhTUcQj6fm7qrOuA9BrVzHqhPhnhuLuojQhKPGtqor7P_
 
 ###Accepted lang
 GET http://localhost:8080/category/by-lang
-Accept-Language: RU
+Accept-Language: EN

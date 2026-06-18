@@ -14,7 +14,7 @@ import top.news.service.CategoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("category")
+@RequestMapping("/category")
 public class CategoryController {
 
     @Autowired
