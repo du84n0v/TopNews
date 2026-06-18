@@ -1,75 +1,67 @@
 ###create profile
-POST http://localhost:8080/profile/create
+POST http://localhost:8080/profile/admin/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNzEzNzY1LCJleHAiOjE3ODE3MTczNjV9.vQ611mzEM8LoePSdQB2HGtmTWQGVOsIPESFwghJgXMjZhXo2uNl5q2ecUofFqHyA
-
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjE1NzIsImV4cCI6MTc4MTc2NTE3Mn0.hJLKveX7dfe9pcS4GuJnF5o6Sc8XeXRC8XtRz9U_HvENgDdg3YloccTs9EiJLTZR
 
 {
-  "name": "Ali",
-  "surname": "Valiyev",
-  "username": "ali@gmail.com",
-  "password": "ali123",
-  "status": "ACTIVE",
-  "roleList": ["ROLE_PUBLISHER"]
-}
-
-###create profile
-POST http://localhost:8080/profile/create
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVHVyc3Vub3YiLCJyb2xlcyI6WyJST0xFX01PREVSQVRPUiJdLCJuYW1lIjoiTXVzbGltIiwiaWQiOjQ1LCJzdWIiOiJtdXNsaW1AZ21haWwuY29tIiwiaWF0IjoxNzgxNzEzNzY1LCJleHAiOjE3ODE3MTczNjV9.vQ611mzEM8LoePSdQB2HGtmTWQGVOsIPESFwghJgXMjZhXo2uNl5q2ecUofFqHyA
-
-{
-  "name": "Muslim",
-  "surname": "Tursunov",
-  "username": "muslim@gmail.com",
-  "password": "muslim",
+  "name": "User",
+  "surname": "User",
+  "username": "+9981234567",
+  "password": "54321",
   "status": "ACTIVE",
   "roleList": ["ROLE_MODERATOR"]
-}
-
-###create profile
-POST http://localhost:8080/profile/create
-Content-Type: application/json
-
-{
-  "name": "Jasur",
-  "surname": "Toshmatov",
-  "username": "jasur@gmail.com",
-  "password": "jasur123",
-  "status": "ACTIVE",
-  "roleList": ["ROLE_MODERATOR", "ROLE_PUBLISHER"]
 }
 
 ###get profile list
-
 GET localhost:8080/profile/list
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjIyODQsImV4cCI6MTc4MTc2NTg4NH0.DxJINf7FZIwPwdkzBca1wTqgV9tN6VzYe-kOAyaLbr45UBW7oDH9AlIFQUkZzosF
+
+###get by id
+GET localhost:8080/profile/by-id/3
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjIyODQsImV4cCI6MTc4MTc2NTg4NH0.DxJINf7FZIwPwdkzBca1wTqgV9tN6VzYe-kOAyaLbr45UBW7oDH9AlIFQUkZzosF
 
 ###update admin
-PUT http://localhost:8080/profile/admin-update/2
+PUT http://localhost:8080/profile/admin/update/2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjIyODQsImV4cCI6MTc4MTc2NTg4NH0.DxJINf7FZIwPwdkzBca1wTqgV9tN6VzYe-kOAyaLbr45UBW7oDH9AlIFQUkZzosF
 
 {
-  "name": "Ali",
-  "surname": "Valiyev",
-  "username": "ali_new@gmail.com",
-  "status": "BLOCKED",
-  "roleList": ["ROLE_MODERATOR"]
+  "name": "User",
+  "surname": "Userov",
+  "username": "+998991234567",
+  "status": "ACTIVE",
+  "roleList": ["ROLE_USER"]
 }
 
 ###update delail
-PUT http://localhost:8080/profile/update-detail/3
+PUT http://localhost:8080/profile/update/detail/2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiVXNlcm92Iiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sIm5hbWUiOiJVc2VyIiwiaWQiOjIsInN1YiI6Iis5OTg5OTEyMzQ1NjciLCJpYXQiOjE3ODE3NjMwMjgsImV4cCI6MTc4MTc2NjYyOH0.4raE_m9PBxEZQM8iXL1YGbLipiqEkGSjQ9gbNpGQm9Zy2VTJCwOE9OUfFoCMuaNU
 
 {
-  "name": "Sarvar",
-  "surname": "Rahimov"
+  "name": "User",
+  "surname": "Userov"
 }
 
+###delete profile
+PUT localhost:8080/profile/admin/delete/2
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjMzMzUsImV4cCI6MTc4MTc2NjkzNX0.L40UWe1Oeb3pHDAI_0o_A_VfQcRRUAm7N_5wHepMaZdKuhqCfswfLBTGZforHobh
+
 ###update password
-PUT http://localhost:8080/profile/update-password/1
+PUT http://localhost:8080/profile/update/password/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjIyODQsImV4cCI6MTc4MTc2NTg4NH0.DxJINf7FZIwPwdkzBca1wTqgV9tN6VzYe-kOAyaLbr45UBW7oDH9AlIFQUkZzosF
 
 {
-  "currentPassword": "11111",
-  "newPassword": "ali456"
+  "currentPassword": "asdfg",
+  "newPassword": "12345"
+}
+
+###filter
+POST localhost:8080/profile/filter
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdXJuYW1lIjoiQWRtaW5vdiIsInJvbGVzIjpbIlJPTEVfQURNSU4iXSwibmFtZSI6IkFkbWluIiwiaWQiOjEsInN1YiI6Iis5OTg5ODc2NTQzMjEiLCJpYXQiOjE3ODE3NjIyODQsImV4cCI6MTc4MTc2NTg4NH0.DxJINf7FZIwPwdkzBca1wTqgV9tN6VzYe-kOAyaLbr45UBW7oDH9AlIFQUkZzosF
+
+{
+  "surname": "E"
 }

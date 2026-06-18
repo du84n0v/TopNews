@@ -9,7 +9,7 @@ import top.news.dto.profile.*;
 import top.news.service.ProfileService;
 
 @RestController
-@RequestMapping("profile")
+@RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class ProfileController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/by-id/{profileId}")
+    @PutMapping("/admin/delete/{profileId}")
     public ResponseEntity<String> delete(@PathVariable Integer profileId){
         return ResponseEntity.ok(profileService.deleteByProfileId(profileId));
     }
@@ -64,6 +64,7 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.updatePassword(profileId, pDto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/filter")
     public ResponseEntity<PageImpl<ProfileResponseDTO>> filter(@RequestParam(name = "page", defaultValue = "1") Integer page,
                                                                @RequestParam(name = "size", defaultValue = "10") Integer size,

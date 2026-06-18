@@ -40,6 +40,7 @@ public class SpringConfig {
             "/article/last-12",
             "/article/most-read-except/{articleId}",
             "/article/increase-view-count-by-id/{articleId}",
+            "/article/increase-share-count-by-id/{articleId}",
             "/article/filter"
     };
 

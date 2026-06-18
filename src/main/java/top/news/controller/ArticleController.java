@@ -106,6 +106,7 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.filterForModerator(dto, page-1, size));
     }
 
+    @PreAuthorize("hasRole('PUBLISHER')")
     @PostMapping("/publisher/filter")
     public ResponseEntity<Page<ArticleShortInfoDTO>> filterForPublisher(@RequestParam(name = "page", defaultValue = "1") Integer page,
                                                                         @RequestParam(name = "size", defaultValue = "5") Integer size,

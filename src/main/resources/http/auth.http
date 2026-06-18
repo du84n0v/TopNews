@@ -3,9 +3,9 @@ POST localhost:8080/auth/registration
 Content-Type: application/json
 
 {
-  "name": "Kimdir",
-  "surname": "Man",
-  "username": "+998900990636",
+  "name": "Admin",
+  "surname": "Adminov",
+  "username": "+998987654321",
   "password": "12345"
 }
 
@@ -14,9 +14,9 @@ POST localhost:8080/auth/registration
 Content-Type: application/json
 
 {
-  "name": "Who",
-  "surname": "Whoev",
-  "username": "+998990720636",
+  "name": "Admin",
+  "surname": "Adminov",
+  "username": "+9981234567",
   "password": "54321"
 }
 
@@ -26,10 +26,21 @@ POST localhost:8080/auth/registration
 Content-Type: application/json
 
 {
-  "name": "Tesha",
-  "surname": "Boltayev",
+  "name": "Moderator",
+  "surname": "Moderatorov",
+  "username": "oqmol24@gmail.com",
+  "password": "trewq"
+}
+
+###register
+POST localhost:8080/auth/registration
+Content-Type: application/json
+
+{
+  "name": "Publisher",
+  "surname": "Publisherov",
   "username": "kumbay64@gmail.com",
-  "password": "54321"
+  "password": "qwert"
 }
 
 ###verify
@@ -37,8 +48,8 @@ POST localhost:8080/auth/verify
 Content-Type: application/json
 
 {
-  "username": "muslim@gmail.com",
-  "code": "212393"
+  "username": "+998987654321",
+  "code": "537136"
 }
 
 ###resend
@@ -49,8 +60,8 @@ GET localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "muslim@gmail.com",
-  "password": "muslim"
+  "username": "+998987654321",
+  "password": "12345"
 }
 
 ###login
@@ -58,6 +69,6 @@ GET localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "oqmol24@gmail.com",
-  "password": "12345"
+  "username": "+998991234567",
+  "password": "54321"
 }
