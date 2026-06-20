@@ -262,4 +262,9 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
 
     }
+
+    public void articleExists(String articleId) {
+        articleRepository.findByIdAndVisibleTrue(articleId)
+                .orElseThrow(() -> new ItemNotFoundException("Article not found"));
+    }
 }

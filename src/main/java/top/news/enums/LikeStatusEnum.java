@@ -1,6 +1,6 @@
 package top.news.enums;
 
-public enum LikeActionEnum {
+public enum LikeStatusEnum {
     LIKE,
     DISLIKE
 }

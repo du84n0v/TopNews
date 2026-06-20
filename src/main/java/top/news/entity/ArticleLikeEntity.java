@@ -1,7 +1,9 @@
 package top.news.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import top.news.enums.LikeStatusEnum;
 
@@ -9,29 +11,31 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "comment_like")
-public class CommentLikeEntity {
+@Table(name = "article_like")
+public class ArticleLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "profile_id")
+    @Column(name = "profile_id", nullable = false)
     private Integer profileId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", insertable = false, updatable = false)
     private ProfileEntity profile;
 
-    @Column(name = "comment_id")
-    private Integer commentId;
+    @Column(name = "article_id", nullable = false)
+    private String articleId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", insertable = false, updatable = false)
-    private CommentEntity comment;
+    @JoinColumn(name = "article_id", insertable = false, updatable = false)
+    private ArticleEntity article;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "action")
-    private LikeStatusEnum likeAction;
+    @Column(name = "status")
+    private LikeStatusEnum status;
 
     @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 }
