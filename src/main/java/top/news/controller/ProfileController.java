@@ -53,9 +53,9 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getProfileList(page-1, size));
     }
 
-    @PutMapping("/update/photo")
-    public ResponseEntity<String> updatePhoto(@RequestBody ProfileUpdatePhotoDTO dto){
-        return ResponseEntity.ok(profileService.updateProfilePhoto(dto));
+    @PutMapping("/update/photo/{attachId}")
+    public ResponseEntity<String> updatePhoto(@PathVariable String attachId){
+        return ResponseEntity.ok(profileService.updateProfilePhoto(attachId));
     }
 
     @PutMapping("/update/password/{profileId}")

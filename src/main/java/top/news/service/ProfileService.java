@@ -14,6 +14,7 @@ import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
 import top.news.repository.ProfileRepository;
 import top.news.repository.custom.CustomProfileRepository;
+import top.news.util.SpringSecurityUtil;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -154,8 +155,22 @@ public class ProfileService {
         return "Successfully updated";
     }
 
-    public String updateProfilePhoto(ProfileUpdatePhotoDTO dto) {
-        return null;
+    public String updateProfilePhoto(String attachId) {
+        Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(SpringSecurityUtil.getCurrentProfileId());
+
+        if(optional.isEmpty()){
+            throw new ItemNotFoundException("Profile Not found");
+        }
+        ProfileEntity profile = optional.get();
+
+        if(profile.getPhotoId() != null){
+            attachService.deleteContent(profile.getPhotoId());
+        }
+        profile.setPhotoId(attachId);
+
+        profileRepository.save(profile);
+
+        return "Successfully updated";
     }
 
     public PageImpl<ProfileResponseDTO> filter(ProfileFilterDTO dto, Integer page, Integer size) {

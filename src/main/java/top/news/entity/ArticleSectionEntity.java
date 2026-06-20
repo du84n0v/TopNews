@@ -16,7 +16,14 @@ public class ArticleSectionEntity {
 
     @Column(name = "article_id")
     private String articleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id", insertable = false, updatable = false)
+    private ArticleEntity article;
+
 
     @Column(name = "section_id")
     private Integer sectionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "section_id", insertable = false, updatable = false)
+    private SectionEntity section;
 }
