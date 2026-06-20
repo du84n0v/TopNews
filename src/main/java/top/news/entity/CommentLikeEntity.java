@@ -30,7 +30,7 @@ public class CommentLikeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "action")
-    private LikeStatusEnum likeAction;
+    private LikeStatusEnum status;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
