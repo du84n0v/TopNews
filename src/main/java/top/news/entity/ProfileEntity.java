@@ -42,7 +42,6 @@ public class ProfileEntity {
     @Column(name = "photo_id")
     private String photoId;
 
-    @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER
-    )
+    @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER)
     List<ProfileRoleEntity> roles;
 }
