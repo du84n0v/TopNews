@@ -10,7 +10,7 @@ import top.news.service.EmailHistoryService;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/email-history")
+@RequestMapping("/api/v1//email-history")
 public class EmailHistoryController {
 
     @Autowired

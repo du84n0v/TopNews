@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.news.service.CommentLikeService;
 
 @RestController
-@RequestMapping("/comment-like")
+@RequestMapping("/api/v1//comment-like")
 public class CommentLikeController {
 
     @Autowired

@@ -9,7 +9,7 @@ import top.news.dto.profile.*;
 import top.news.service.ProfileService;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/api/v1//profile")
 public class ProfileController {
 
     @Autowired

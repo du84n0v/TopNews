@@ -13,7 +13,8 @@ import top.news.service.AuthService;
 import top.news.service.ProfileService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -42,7 +43,7 @@ public class AuthController {
         return ResponseEntity.ok(profileService.updateProfileById(profileId, dto));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<ProfileResponseDTO> login(@RequestBody LoginDTO login){
         return ResponseEntity.ok(authService.login(login));
     }

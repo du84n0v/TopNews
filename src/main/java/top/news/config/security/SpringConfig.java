@@ -33,7 +33,7 @@ public class SpringConfig {
     private JwtAuthenticationFilter jwtTokenFilter;
 
     public static final String[] AUTH_WHITELIST = {
-            "/auth/**",
+            "/api/auth/**",
 
             "/article/last-n-by-section/{sectionId}",
             "/article/last-n-by-category/{categoryId}",

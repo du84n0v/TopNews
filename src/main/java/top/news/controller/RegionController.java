@@ -14,7 +14,7 @@ import top.news.service.RegionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/region")
+@RequestMapping("/api/v1//region")
 public class RegionController {
 
     @Autowired

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.news.service.SavedArticleService;
 
 @RestController
-@RequestMapping("saved-article")
+@RequestMapping("/api/v1//saved-article")
 public class SavedArticleController {
 
     @Autowired

@@ -226,6 +226,8 @@ public class ArticleService {
         article.setSharedCount(0);
         article.setStatus(ArticleStatusEnum.NOT_PUBLISHED);
         article.setViewCount(0);
+        article.setLikeCount(0);
+        article.setDislikeCount(0);
         return article;
     }
 

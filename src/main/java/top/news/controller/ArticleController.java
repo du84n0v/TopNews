@@ -14,7 +14,7 @@ import top.news.service.ArticleService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/api/v1//article")
 public class ArticleController {
 
     @Autowired

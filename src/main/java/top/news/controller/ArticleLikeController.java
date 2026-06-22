@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.news.service.ArticleLikeService;
 
 @RestController
-@RequestMapping("/article-like")
+@RequestMapping("/api/v1//article-like")
 public class ArticleLikeController {
 
     @Autowired

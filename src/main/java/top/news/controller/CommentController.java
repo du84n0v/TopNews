@@ -11,7 +11,7 @@ import top.news.service.CommentService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/v1//comment")
 public class CommentController {
 
     @Autowired
