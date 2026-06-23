@@ -64,5 +64,4 @@ public class ArticleEntity {
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
-
 }

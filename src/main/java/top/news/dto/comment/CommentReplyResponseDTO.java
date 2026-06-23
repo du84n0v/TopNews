@@ -12,4 +12,5 @@ public class CommentReplyResponseDTO {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private CommentProfileDTO profileDto;
+    private Integer likeCount;
 }

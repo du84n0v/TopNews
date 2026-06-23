@@ -18,7 +18,7 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity, String>
 
     Optional<ArticleEntity> findByIdAndVisibleTrue(String articleId);
 
-    @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
+    @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.likeCount AS likeCount, a.dislikeCount AS dislikeCount,  a.publishedDate AS publishedDat " +
             " FROM ArticleEntity a " +
             " INNER JOIN ArticleSectionEntity ss ON a.id=ss.articleId " +
             " WHERE ss.sectionId =?1 " +

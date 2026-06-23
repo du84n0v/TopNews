@@ -14,7 +14,7 @@ import top.news.service.TagService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1//tag")
+@RequestMapping("/api/v1/tag")
 public class TagController {
 
     @Autowired

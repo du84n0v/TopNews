@@ -21,8 +21,7 @@ public class CustomCommentRepository {
         StringBuilder select = new StringBuilder(
                 "SELECT c.id, c.createdDate, c.updatedDate, c.content, c.replyId, c.visible, " +
                 " p.id, p.name, p.surname, a.id, a.title, " +
-                " (SELECT COUNT(cl) FROM CommentLikeEntity cl WHERE cl.commentId = c.id AND cl.status = top.news.enums.LikeStatusEnum.LIKE), " +
-                " (SELECT COUNT(cl) FROM CommentLikeEntity cl WHERE cl.commentId = c.id AND cl.status = top.news.enums.LikeStatusEnum.DISLIKE) ");
+                " (SELECT COUNT(cl) FROM CommentLikeEntity cl WHERE cl.commentId = c.id AND cl.status = top.news.enums.LikeStatusEnum.LIKE), " );
 
         StringBuilder filter = new StringBuilder(" FROM CommentEntity c ");
         filter.append(" INNER JOIN c.profile p ");

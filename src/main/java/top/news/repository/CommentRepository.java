@@ -21,7 +21,7 @@ public interface CommentRepository extends CrudRepository<CommentEntity, Integer
     int changeVisibleById(Integer commentId);
 
     @Query("SELECT ce.id AS id, ce.createdDate AS createdDate, " +
-            " ce.updateDate AS updatedDate, pe.id AS profileId, " +
+            " ce.updateDate AS updatedDate, ce.likeCount AS likeCount, pe.id AS profileId, " +
             " pe.name AS name, pe.surname AS surname" +
             " FROM CommentEntity  ce " +
             " INNER JOIN ProfileEntity pe on pe.id = ce.profileId " +
@@ -32,8 +32,7 @@ public interface CommentRepository extends CrudRepository<CommentEntity, Integer
             " c.content AS content, c.articleId AS articleId, " +
             " p.id AS profileId, p.name AS profileName, " +
             " p.photoId AS photoId, " + // Rasm UUID ID-si
-            " (SELECT COUNT(cl) FROM CommentLikeEntity cl WHERE cl.commentId = c.id AND cl.status = 'LIKE') AS likeCount, " +
-            " (SELECT COUNT(cl) FROM CommentLikeEntity cl WHERE cl.commentId = c.id AND cl.status = 'DISLIKE') AS dislikeCount " +
+            " (SELECT COUNT(cl) FROM CommentLikeEntity cl WHERE cl.commentId = c.id AND cl.status = 'LIKE') AS likeCount " +
             " FROM CommentEntity c " +
             " INNER JOIN ProfileEntity p on p.id = c.profileId " +
             " WHERE c.articleId = ?1 AND c.visible = true")

@@ -13,7 +13,7 @@ import top.news.dto.attach.AttachDTO;
 import top.news.service.AttachService;
 
 @RestController
-@RequestMapping("/api/v1//attaches")
+@RequestMapping("/api/v1/attaches")
 public class AttachController {
     @Autowired
     private AttachService attachService;

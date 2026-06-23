@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import top.news.dto.article.ArticleShortDTO;
-import top.news.dto.like.LikeCountDTO;
 
 import java.time.LocalDateTime;
 
@@ -22,5 +21,5 @@ public class CommentFilterFullDTO {
     private CommentProfileDTO profileDto;
     private Integer replyId;
     private Boolean visible;
-    private LikeCountDTO likeDto;
+    private Integer likeCount;
 }

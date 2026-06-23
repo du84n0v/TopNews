@@ -12,6 +12,5 @@ public interface CommentArticleMapper {
     String getContent();
     String getArticleId();
     Integer getLikeCount();
-    Integer getDislikeCount();
 
 }

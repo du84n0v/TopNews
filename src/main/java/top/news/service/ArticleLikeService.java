@@ -85,7 +85,6 @@ public class ArticleLikeService {
                 return "You dislike it";
             }
         }
-
     }
 
     private void check(String articleId){

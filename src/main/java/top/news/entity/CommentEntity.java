@@ -36,6 +36,9 @@ public class CommentEntity {
     @JoinColumn(name = "reply_id", insertable = false, updatable = false)
     private CommentEntity replyComment;
 
+    @Column(name = "like_count")
+    private Integer likeCount;
+
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 

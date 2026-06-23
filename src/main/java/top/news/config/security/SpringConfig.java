@@ -33,24 +33,25 @@ public class SpringConfig {
     private JwtAuthenticationFilter jwtTokenFilter;
 
     public static final String[] AUTH_WHITELIST = {
-            "/api/auth/**",
+            "/api/v1/auth/**",
 
-            "/article/last-n-by-section/{sectionId}",
-            "/article/last-n-by-category/{categoryId}",
-            "/article/last-n-by-region/{regionId}",
-            "/article/last-12",
-            "/article/most-read-except/{articleId}",
-            "/article/increase-view-count-by-id/{articleId}",
-            "/article/increase-share-count-by-id/{articleId}",
-            "/article/filter",
+            "/api/v1/article/last-n-by-section/{sectionId}",
+            "/api/v1/article/last-n-by-category/{categoryId}",
+            "/api/v1/article/last-n-by-region/{regionId}",
+            "/api/v1/article/last-12",
+            "/api/v1/article/most-read-except/{articleId}",
+            "/api/v1/article/increase-view-count-by-id/{articleId}",
+            "/api/v1/article/increase-share-count-by-id/{articleId}",
+            "/api/v1/article/filter",
+            "/api/v1/article/get-by-id/{articleId}",
 
-            "/region/by-lang",
-            "/category/by-lang",
-            "/section/by-lang",
+            "/api/v1/region/by-lang",
+            "/api/v1/category/by-lang",
+            "/api/v1/section/by-lang",
 
-            "/attaches/upload",
-            "/attaches/open/{fileId}",
-            "/attaches/download/{fileId}",
+            "/api/v1/attaches/upload",
+            "/api/v1/attaches/open/{fileId}",
+            "/api/v1/attaches/download/{fileId}",
     };
 
     @Bean

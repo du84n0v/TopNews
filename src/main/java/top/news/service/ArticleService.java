@@ -7,10 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import top.news.dto.article.ArticleFilterDTO;
-import top.news.dto.article.ArticleRequestDTO;
-import top.news.dto.article.ArticleShortInfoDTO;
-import top.news.dto.article.ArticleStatusDTO;
+import top.news.dto.article.*;
 import top.news.entity.ArticleEntity;
 import top.news.enums.ArticleStatusEnum;
 import top.news.exception.AppBadRequestException;
@@ -268,5 +265,30 @@ public class ArticleService {
     public void articleExists(String articleId) {
         articleRepository.findByIdAndVisibleTrue(articleId)
                 .orElseThrow(() -> new ItemNotFoundException("Article not found"));
+    }
+
+    public ArticleFullInfoDTO getArticleById(String articleId) {
+        Optional<ArticleEntity> optional = articleRepository.findByIdAndVisibleTrue(articleId);
+        if(optional.isEmpty()){
+            throw new ItemNotFoundException("Article not found");
+        }
+
+        articleRepository.increaseViewCountById(articleId);
+
+        ArticleEntity article = optional.get();
+
+        ArticleFullInfoDTO response = new ArticleFullInfoDTO();
+        response.setId(articleId);
+        response.setDescription(article.getDescription());
+        response.setContent(article.getContent());
+        response.setTitle(article.getTitle());
+        response.setLikeCount(article.getLikeCount());
+        response.setPublishedDate(article.getPublishedDate());
+        response.setCategoryList(articleCategoryService.getArticleCategories(articleId));
+        response.setSectionList(articleSectionService.getArticleSection(articleId));
+        response.setSharedCount(article.getSharedCount());
+        response.setViewCount(article.getViewCount());
+
+        return response;
     }
 }

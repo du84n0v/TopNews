@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.news.service.CommentLikeService;
 
 @RestController
-@RequestMapping("/api/v1//comment-like")
+@RequestMapping("/api/v1/comment-like")
 public class CommentLikeController {
 
     @Autowired
@@ -18,10 +18,5 @@ public class CommentLikeController {
     @PostMapping("/like/{commentId}")
     public ResponseEntity<String> like(@PathVariable Integer commentId){
         return ResponseEntity.ok(commentLikeService.like(commentId));
-    }
-
-    @PostMapping("/dislike/{commentId}")
-    public ResponseEntity<String> dislike(@PathVariable Integer commentId){
-        return ResponseEntity.ok(commentLikeService.dislike(commentId));
     }
 }

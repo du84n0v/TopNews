@@ -15,7 +15,7 @@ import top.news.service.SectionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1//section")
+@RequestMapping("/api/v1/section")
 public class SectionController {
 
     @Autowired

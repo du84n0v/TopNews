@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import top.news.dto.like.LikeCountDTO;
 
 import java.time.LocalDateTime;
 
@@ -19,5 +18,5 @@ public class CommentArticleDTO {
     private String content;
     private String articleId;
     private CommentProfileDTO profileDto;
-    private LikeCountDTO likeCountDto;
+    private Integer likeCount;
 }

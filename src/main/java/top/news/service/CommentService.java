@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import top.news.dto.article.ArticleShortDTO;
 import top.news.dto.comment.*;
-import top.news.dto.like.LikeCountDTO;
 import top.news.entity.CommentEntity;
 import top.news.exception.AppBadRequestException;
 import top.news.exception.ItemNotFoundException;
@@ -43,6 +41,7 @@ public class CommentService {
         comment.setArticleId(dto.getArticleId());
         comment.setProfileId(SpringSecurityUtil.getCurrentProfileId());
         if(dto.getReplyId() != null) comment.setReplyId(dto.getReplyId());
+        comment.setLikeCount(0);
         comment.setCreatedDate(LocalDateTime.now());
         comment.setVisible(Boolean.TRUE);
 
@@ -99,21 +98,6 @@ public class CommentService {
                 .toList();
     }
 
-    private CommentReplyResponseDTO replyMapperToDto(CommentRepliesMapper mapper){
-        CommentReplyResponseDTO dto = new CommentReplyResponseDTO();
-        if(mapper.getId() != null) dto.setId(mapper.getId());
-        if(mapper.getCreatedDate() != null) dto.setCreatedDate(mapper.getCreatedDate());
-        if(mapper.getUpdatedDate() != null) dto.setUpdatedDate(mapper.getUpdatedDate());
-        if(mapper.getProfileId() != null) dto.setProfileDto(new CommentProfileDTO(
-                mapper.getProfileId(),
-                mapper.getName(),
-                mapper.getSurname(),
-                null
-        ));
-
-        return dto;
-    }
-
     public List<CommentArticleDTO> getArticleComments(String articleId) {
         articleService.articleExists(articleId);
 
@@ -127,16 +111,13 @@ public class CommentService {
             if(comment.getUpdatedDate() != null) dto.setUpdatedDate(comment.getUpdatedDate());
             if(comment.getContent() != null) dto.setContent(comment.getContent());
             if(comment.getArticleId() != null) dto.setArticleId(comment.getArticleId());
+            if(comment.getLikeCount() != null) dto.setLikeCount(comment.getLikeCount());
             if(comment.getProfileId() != null) dto.setProfileDto(new CommentProfileDTO(
                     comment.getProfileId(),
                     comment.getName(),
                     null,
                     attachService.openDTO(comment.getPhotoId())
 
-            ));
-            dto.setLikeCountDto(new LikeCountDTO(
-                    comment.getLikeCount() == null ? 0L : comment.getLikeCount(),
-                    comment.getDislikeCount() == null ? 0L : comment.getDislikeCount()
             ));
 
             response.add(dto);
@@ -160,7 +141,7 @@ public class CommentService {
             cur.setVisible((Boolean) o[5]);
             cur.setProfileDto(new CommentProfileDTO((Integer) o[6], (String) o[7], (String) o[8], null));
             cur.setArticleDto(new ArticleShortDTO((String) o[9], (String) o[10]));
-            cur.setLikeDto(new LikeCountDTO((Long) o[11], (Long) o[12]));
+            cur.setLikeCount((Integer) o[11]);
 
             response.add(cur);
         }
@@ -171,5 +152,21 @@ public class CommentService {
     public void commentExists(Integer commentId) {
         commentRepository.findByIdAndVisibleTrue(commentId)
                 .orElseThrow(() -> new ItemNotFoundException("Comment not found"));
+    }
+
+    private CommentReplyResponseDTO replyMapperToDto(CommentRepliesMapper mapper){
+        CommentReplyResponseDTO dto = new CommentReplyResponseDTO();
+        if(mapper.getId() != null) dto.setId(mapper.getId());
+        if(mapper.getCreatedDate() != null) dto.setCreatedDate(mapper.getCreatedDate());
+        if(mapper.getUpdatedDate() != null) dto.setUpdatedDate(mapper.getUpdatedDate());
+        if(mapper.getLikeCount() != null) dto.setLikeCount(mapper.getLikeCount());
+        if(mapper.getProfileId() != null) dto.setProfileDto(new CommentProfileDTO(
+                mapper.getProfileId(),
+                mapper.getName(),
+                mapper.getSurname(),
+                null
+        ));
+
+        return dto;
     }
 }

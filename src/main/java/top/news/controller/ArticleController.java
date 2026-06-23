@@ -5,16 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import top.news.dto.article.ArticleFilterDTO;
-import top.news.dto.article.ArticleRequestDTO;
-import top.news.dto.article.ArticleShortInfoDTO;
-import top.news.dto.article.ArticleStatusDTO;
+import top.news.dto.article.*;
 import top.news.service.ArticleService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1//article")
+@RequestMapping("/api/v1/article")
+@CrossOrigin(origins = "*")
 public class ArticleController {
 
     @Autowired
@@ -46,6 +44,11 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.changeArticleStatus(articleId, dto));
     }
 
+    @GetMapping("/get-by-id/{articleId}")
+    public ResponseEntity<ArticleFullInfoDTO> getById(@PathVariable String articleId) {
+        return ResponseEntity.ok(articleService.getArticleById(articleId));
+    }
+
     @GetMapping("/last-n-by-section/{sectionId}")
     public ResponseEntity<Page<ArticleShortInfoDTO>> lastNBySection(@PathVariable Integer sectionId,
                                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
@@ -53,7 +56,7 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.getLastNArticleBySectionId(sectionId, page-1, size));
     }
 
-    @GetMapping("/last-12")
+    @PostMapping("/last-12")
     public ResponseEntity<Page<ArticleShortInfoDTO>> last12(@RequestBody List<String> ids,
                                                             @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                             @RequestParam(name = "size", defaultValue = "12") Integer size){
