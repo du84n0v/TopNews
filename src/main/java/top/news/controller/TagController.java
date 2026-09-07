@@ -1,6 +1,8 @@
 package top.news.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +24,8 @@ public class TagController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<Boolean> create(@RequestBody TagDTO dto){
-        return ResponseEntity.ok(tagService.create(dto));
+    public ResponseEntity<Boolean> create(@Valid @RequestBody TagDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(tagService.create(dto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
