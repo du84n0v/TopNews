@@ -2,12 +2,12 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.entity.CommentLikeEntity;
 import top.news.enums.LikeStatusEnum;
 import top.news.repository.CommentLikeRepository;
 import top.news.util.SpringSecurityUtil;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -18,6 +18,7 @@ public class CommentLikeService {
     @Autowired
     private CommentService commentService;
 
+    @Transactional
     public String like(Integer commentId) {
         check(commentId);
         Integer profileId = SpringSecurityUtil.getCurrentProfileId();

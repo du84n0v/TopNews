@@ -1,8 +1,8 @@
 package top.news.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.category.CategoryShortDTO;
 import top.news.entity.ArticleCategoryEntity;
 import top.news.repository.ArticleCategoryRepository;
@@ -31,6 +31,7 @@ public class ArticleCategoryService {
         articleCategoryRepository.deleteAllByArticleId(articleId);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryShortDTO> getArticleCategories(String articleId) {
         List<ArticleCategoryEntity> ans = articleCategoryRepository.getAllByArticleId(articleId);
         return ans.stream()

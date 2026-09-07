@@ -2,6 +2,7 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.category.CategoryRequestDTO;
 import top.news.dto.category.CategoryResponseDTO;
 import top.news.entity.CategoryEntity;
@@ -11,7 +12,6 @@ import top.news.exception.ItemNotFoundException;
 import top.news.mapper.CategoryMapper;
 import top.news.repository.CategoryRepository;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Transactional
     public String createCategory(CategoryRequestDTO dto) {
         Optional<CategoryEntity> optional = categoryRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(optional.isPresent()){
@@ -45,6 +46,7 @@ public class CategoryService {
         return category;
     }
 
+    @Transactional
     public String updateCategoryById(Integer categoryId, CategoryRequestDTO dto) {
         Optional<CategoryEntity> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
         if(optional.isEmpty()){
@@ -65,6 +67,7 @@ public class CategoryService {
         return "Successfully updated";
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String deleteCategoryById(Integer categoryId) {
         Optional<CategoryEntity> optional = categoryRepository.findByIdAndVisibleTrue(categoryId);
         if(optional.isEmpty()){
@@ -74,6 +77,7 @@ public class CategoryService {
         return (categoryRepository.delete(categoryId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryEntity> getCategoryList() {
         Iterable<CategoryEntity> categories = categoryRepository.findAllByVisibleTrue();
 
@@ -84,6 +88,7 @@ public class CategoryService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponseDTO> getCategoriesByLang(AppLanguage lang) {
         List<CategoryMapper> mappers = categoryRepository.findByLang(lang.name());
         List<CategoryResponseDTO> response = new LinkedList<>();

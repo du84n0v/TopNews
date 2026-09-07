@@ -2,6 +2,7 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.tag.TagDTO;
 import top.news.dto.tag.TagInfoDTO;
 import top.news.entity.TagEntity;
@@ -9,7 +10,6 @@ import top.news.enums.TagStatusEnum;
 import top.news.exception.AppBadRequestException;
 import top.news.repository.TagRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +19,10 @@ public class TagService {
     @Autowired
     private TagRepository tagRepository;
 
+    @Transactional
     public Boolean create(TagDTO dto) {
         Optional<TagEntity> optional = tagRepository.findByName(dto.getName().toLowerCase());
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             throw new AppBadRequestException("This tag is already exist");
         }
 
@@ -34,6 +35,7 @@ public class TagService {
         return Boolean.TRUE;
     }
 
+    @Transactional(readOnly = true)
     public List<TagInfoDTO> getList() {
         return tagRepository.findAll()
                 .stream()
@@ -41,7 +43,7 @@ public class TagService {
                 .toList();
     }
 
-    private TagInfoDTO entityToDto(TagEntity tag){
+    private TagInfoDTO entityToDto(TagEntity tag) {
         return new TagInfoDTO(tag.getId(), tag.getName(), tag.getStatus());
     }
 }

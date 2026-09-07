@@ -2,6 +2,7 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.region.RegionRequestDTO;
 import top.news.dto.region.RegionResponseDTO;
 import top.news.entity.RegionEntity;
@@ -11,7 +12,6 @@ import top.news.exception.ItemNotFoundException;
 import top.news.mapper.RegionMapper;
 import top.news.repository.RegionRepository;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class RegionService {
     @Autowired
     private RegionRepository regionRepository;
 
+    @Transactional
     public String saveRegion(RegionRequestDTO dto) {
         Optional<RegionEntity> optional = regionRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(optional.isPresent()){
@@ -35,6 +36,7 @@ public class RegionService {
         return "Successfully created";
     }
 
+    @Transactional
     public String updateById(Integer regionId, RegionRequestDTO dto) {
         Optional<RegionEntity> optional = regionRepository.findByIdAndVisibleTrue(regionId);
         if(optional.isEmpty()){
@@ -63,6 +65,7 @@ public class RegionService {
         return region;
     }
 
+    @Transactional
     public String deleteRegion(Integer regionId) {
         Optional<RegionEntity> optional = regionRepository.findByIdAndVisibleTrue(regionId);
         if(optional.isEmpty()){
@@ -71,6 +74,7 @@ public class RegionService {
         return (regionRepository.delete(regionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
+    @Transactional(readOnly = true)
     public List<RegionEntity> getList() {
         Iterable<RegionEntity> regions = regionRepository.findAllByVisibleTrue();
 
@@ -81,6 +85,7 @@ public class RegionService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<RegionResponseDTO> getRegionByLang(AppLanguage lang) {
         List<RegionMapper> mappers = regionRepository.findAllByLang(lang.name());
         List<RegionResponseDTO> response = new LinkedList<>();
