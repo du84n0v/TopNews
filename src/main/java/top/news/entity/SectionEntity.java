@@ -3,12 +3,15 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
+@SQLRestriction("visible = true")
 @Table(name = "section")
 public class SectionEntity {
     @Id
@@ -34,5 +37,6 @@ public class SectionEntity {
     private Boolean visible;
 
     @Column(name = "created_date")
+    @CreationTimestamp
     private LocalDateTime createdDate;
 }

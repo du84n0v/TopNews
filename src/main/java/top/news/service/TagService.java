@@ -28,7 +28,6 @@ public class TagService {
         TagEntity tag = new TagEntity();
         tag.setName(dto.getName().toLowerCase());
         tag.setStatus(TagStatusEnum.ACTIVE);
-        tag.setCreatedDate(LocalDateTime.now());
 
         tagRepository.save(tag);
 

@@ -33,7 +33,6 @@ public class CommentLikeService {
             entity.setProfileId(profileId);
             entity.setCommentId(commentId);
             entity.setStatus(LikeStatusEnum.LIKE);
-            entity.setCreatedDate(LocalDateTime.now());
 
             commentLikeRepository.save(entity);
 

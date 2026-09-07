@@ -3,6 +3,7 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import top.news.enums.TagStatusEnum;
 
 import java.time.LocalDateTime;
@@ -25,5 +26,6 @@ public class TagEntity {
     private TagStatusEnum status = TagStatusEnum.ACTIVE;
 
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 }

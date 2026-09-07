@@ -29,7 +29,6 @@ public class RegionService {
         }
         RegionEntity region = save(dto);
         region.setVisible(Boolean.TRUE);
-        region.setCreatedDate(LocalDateTime.now());
 
         regionRepository.save(region);
 

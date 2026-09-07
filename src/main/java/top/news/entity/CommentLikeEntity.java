@@ -3,6 +3,7 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import top.news.enums.LikeStatusEnum;
 
 import java.time.LocalDateTime;
@@ -33,5 +34,6 @@ public class CommentLikeEntity {
     private LikeStatusEnum status;
 
     @Column(name = "created_date")
+    @CreationTimestamp
     private LocalDateTime createdDate;
 }

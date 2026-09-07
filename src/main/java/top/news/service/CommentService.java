@@ -42,7 +42,6 @@ public class CommentService {
         comment.setProfileId(SpringSecurityUtil.getCurrentProfileId());
         if(dto.getReplyId() != null) comment.setReplyId(dto.getReplyId());
         comment.setLikeCount(0);
-        comment.setCreatedDate(LocalDateTime.now());
         comment.setVisible(Boolean.TRUE);
 
         commentRepository.save(comment);
@@ -63,7 +62,6 @@ public class CommentService {
         }
 
         comment.setContent(dto.getContent());
-        comment.setUpdateDate(LocalDateTime.now());
         commentRepository.save(comment);
 
         return "Successfully updated";

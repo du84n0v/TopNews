@@ -29,7 +29,6 @@ public class CategoryService {
         }
         CategoryEntity category = save(dto);
         category.setVisible(Boolean.TRUE);
-        category.setCreatedDate(LocalDateTime.now());
 
         categoryRepository.save(category);
 
