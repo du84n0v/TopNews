@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.section.SectionRequestDTO;
 import top.news.dto.section.SectionResponseDTO;
 import top.news.entity.SectionEntity;
@@ -26,6 +27,7 @@ public class SectionService {
     @Autowired
     private SectionRepository sectionRepository;
 
+    @Transactional
     public String createSection(SectionRequestDTO dto) {
         Optional<SectionEntity> optional = sectionRepository.findByKeyAndVisibleTrue(dto.getKey());
         if(optional.isPresent()){
@@ -50,6 +52,7 @@ public class SectionService {
         return section;
     }
 
+    @Transactional
     public String updateSectionById(Integer sectionId, SectionRequestDTO dto) {
         Optional<SectionEntity> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
         if(optional.isEmpty()){
@@ -68,6 +71,7 @@ public class SectionService {
         return "Successfully updated";
     }
 
+    @Transactional
     public String deleteSectionById(Integer sectionId) {
         Optional<SectionEntity> optional = sectionRepository.findByIdAndVisibleTrue(sectionId);
         if(optional.isEmpty()){
@@ -76,6 +80,7 @@ public class SectionService {
         return (sectionRepository.delete(sectionId) > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
+    @Transactional(readOnly = true)
     public Page<SectionEntity> getSectionList(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<SectionEntity> sections = sectionRepository.findAllByVisibleTrue(pageable);
@@ -87,6 +92,7 @@ public class SectionService {
         return new PageImpl<>(response, PageRequest.of(page, size), sections.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public List<SectionResponseDTO> getSectionsByLang(AppLanguage lang) {
         List<SectionMapper> mappers = sectionRepository.getByLang(lang.name());
         List<SectionResponseDTO> response = new LinkedList<>();

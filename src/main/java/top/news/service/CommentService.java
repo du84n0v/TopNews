@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.article.ArticleShortDTO;
 import top.news.dto.comment.*;
 import top.news.entity.CommentEntity;
@@ -33,6 +34,7 @@ public class CommentService {
     @Autowired
     private CustomCommentRepository customRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public String create(CommentDTO dto) {
         articleService.articleExists(dto.getArticleId());
 
@@ -40,9 +42,11 @@ public class CommentService {
         comment.setContent(dto.getContent());
         comment.setArticleId(dto.getArticleId());
         comment.setProfileId(SpringSecurityUtil.getCurrentProfileId());
-        if(dto.getReplyId() != null) comment.setReplyId(dto.getReplyId());
+        if(dto.getReplyId() != null){
+            commentExists(dto.getReplyId());
+            comment.setReplyId(dto.getReplyId());
+        }
         comment.setLikeCount(0);
-        comment.setCreatedDate(LocalDateTime.now());
         comment.setVisible(Boolean.TRUE);
 
         commentRepository.save(comment);
@@ -50,6 +54,7 @@ public class CommentService {
         return "You commented";
     }
 
+    @Transactional
     public String update(Integer commentId, CommentUpdateDTO dto) {
         Optional<CommentEntity> optional = commentRepository.findByIdAndVisibleTrue(commentId);
 
@@ -63,12 +68,12 @@ public class CommentService {
         }
 
         comment.setContent(dto.getContent());
-        comment.setUpdateDate(LocalDateTime.now());
         commentRepository.save(comment);
 
         return "Successfully updated";
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String delete(Integer commentId) {
         Optional<CommentEntity> optional = commentRepository.findByIdAndVisibleTrue(commentId);
         if(optional.isEmpty()){
@@ -89,6 +94,7 @@ public class CommentService {
         throw new AppBadRequestException("You can only delete your comment");
     }
 
+    @Transactional(readOnly = true)
     public List<CommentReplyResponseDTO> getReplies(Integer commentId) {
         List<CommentRepliesMapper> repliesMapper = commentRepository.getReplies(commentId);
 
@@ -98,6 +104,7 @@ public class CommentService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<CommentArticleDTO> getArticleComments(String articleId) {
         articleService.articleExists(articleId);
 
@@ -127,6 +134,7 @@ public class CommentService {
 
     }
 
+    @Transactional(readOnly = true)
     public Page<CommentFilterFullDTO> filter(CommentFilterDTO dto, Integer page, Integer size) {
         Page<Object[]> pages = customRepository.filter(dto, page, size);
 

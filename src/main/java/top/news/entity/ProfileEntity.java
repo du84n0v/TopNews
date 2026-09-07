@@ -3,6 +3,8 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 import top.news.enums.ProfileStatusEnum;
 
 import java.time.LocalDateTime;
@@ -11,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@SQLRestriction("visible = true")
 @Table(name = "profile")
 public class ProfileEntity {
     @Id
@@ -37,11 +40,12 @@ public class ProfileEntity {
     private Boolean visible;
 
     @Column(name = "created_date", nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdDate;
 
     @Column(name = "photo_id")
     private String photoId;
 
-    @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY)
     List<ProfileRoleEntity> roles;
 }

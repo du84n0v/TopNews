@@ -1,6 +1,5 @@
 package top.news.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.config.security.CustomUserDetails;
 import top.news.dto.auth.LoginDTO;
 import top.news.dto.auth.RegistrationDTO;
@@ -46,14 +46,13 @@ public class AuthService {
     @Autowired
     private EmailHistoryRepository emailHistoryRepository;
     @Autowired
-    private ProfileService profileService;
-    @Autowired
     private SmsSenderService smsSenderService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Transactional(rollbackFor = Exception.class)
     public String register(RegistrationDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(optional.isPresent()) {
@@ -72,7 +71,6 @@ public class AuthService {
         profile.setPassword(passwordEncoder.encode(dto.getPassword()));
         profile.setStatus(ProfileStatusEnum.NOT_ACTIVE);
         profile.setVisible(Boolean.TRUE);
-        profile.setCreatedDate(LocalDateTime.now());
 
         profileRepository.save(profile);
 
@@ -94,7 +92,7 @@ public class AuthService {
         return "Registration success. Please verify your email or phone.";
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String verify(VerificationDTO dto) {
         LocalDateTime now = LocalDateTime.now();
         VerificationAttemptEntity attempt = attemptRepository.findByUsername(dto.getUsername());
@@ -141,6 +139,7 @@ public class AuthService {
         return "Successfully activated. You can login by now";
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String resend(String email) {
         LocalDateTime now = LocalDateTime.now();
 

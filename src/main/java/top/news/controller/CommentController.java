@@ -1,7 +1,9 @@
 package top.news.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +21,13 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody CommentDTO dto){
-        return ResponseEntity.ok(commentService.create(dto));
+    public ResponseEntity<String> create(@Valid @RequestBody CommentDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.create(dto));
     }
 
     @PutMapping("/update/{commentId}")
     private ResponseEntity<String> update(@PathVariable Integer commentId,
-                                          @RequestBody CommentUpdateDTO dto){
+                                          @Valid @RequestBody CommentUpdateDTO dto){
         return ResponseEntity.ok(commentService.update(commentId, dto));
     }
 

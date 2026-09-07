@@ -1,7 +1,9 @@
 package top.news.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,14 @@ public class ArticleController {
 
     @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<ArticleShortInfoDTO> create(@RequestBody ArticleRequestDTO dto){
-        return ResponseEntity.ok(articleService.createArticle(dto));
+    public ResponseEntity<ArticleShortInfoDTO> create(@Valid @RequestBody ArticleRequestDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(articleService.createArticle(dto));
     }
 
     @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
     @PutMapping("/update/{articleId}")
     public ResponseEntity<ArticleShortInfoDTO> update(@PathVariable String articleId,
-                                                      @RequestBody ArticleRequestDTO dto){
+                                                      @Valid @RequestBody ArticleRequestDTO dto){
         return ResponseEntity.ok(articleService.updateArticle(articleId, dto));
     }
 
@@ -40,7 +42,7 @@ public class ArticleController {
     @PreAuthorize("hasAnyRole('PUBLISHER', 'ADMIN')")
     @PutMapping("/change-status/{articleId}")
     public ResponseEntity<String> changeStatus(@PathVariable String articleId,
-                                               @RequestBody ArticleStatusDTO dto){
+                                               @Valid @RequestBody ArticleStatusDTO dto){
         return ResponseEntity.ok(articleService.changeArticleStatus(articleId, dto));
     }
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import top.news.enums.LikeStatusEnum;
 
 import java.time.LocalDateTime;
@@ -37,5 +38,6 @@ public class ArticleLikeEntity {
     private LikeStatusEnum status;
 
     @Column(name = "created_date")
-    private LocalDateTime createdDate = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 }

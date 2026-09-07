@@ -2,6 +2,7 @@ package top.news.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.news.dto.auth.LoginDTO;
@@ -24,11 +25,11 @@ public class AuthController {
 
     @PostMapping("/registration")
     private ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO dto){
-        return ResponseEntity.ok(authService.register(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(dto));
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<String> verify(@RequestBody VerificationDTO dto){
+    public ResponseEntity<String> verify(@Valid @RequestBody VerificationDTO dto){
         return ResponseEntity.ok(authService.verify(dto));
     }
 
@@ -44,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ProfileResponseDTO> login(@RequestBody LoginDTO login){
+    public ResponseEntity<ProfileResponseDTO> login(@Valid @RequestBody LoginDTO login){
         return ResponseEntity.ok(authService.login(login));
     }
 

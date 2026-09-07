@@ -3,13 +3,20 @@ package top.news.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "comment")
+@SQLRestriction("visible = true")
+@Table(name = "comment", indexes = {
+        @Index(name = "idx_comment_article_id", columnList = "article_id"),
+        @Index(name = "idx_comment_profile_id", columnList = "profile_id")
+})
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +47,11 @@ public class CommentEntity {
     private Integer likeCount;
 
     @Column(name = "created_date")
+    @CreationTimestamp
     private LocalDateTime createdDate;
 
     @Column(name = "update_date")
+    @UpdateTimestamp
     private LocalDateTime updateDate;
 
     @Column(name = "visible")

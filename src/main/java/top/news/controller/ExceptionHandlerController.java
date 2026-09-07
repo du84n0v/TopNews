@@ -1,6 +1,7 @@
 package top.news.controller;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import top.news.exception.BaseException;
+import top.news.exception.ItemNotFoundException;
 
 import java.util.*;
 
@@ -35,7 +37,20 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handle(RuntimeException e){
         e.printStackTrace();
-        return ResponseEntity.internalServerError().body(e.getMessage());
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        body.put("message", "Internal server error. Please try again later."); // Asl xatoni yashirish
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<?> handle(ItemNotFoundException e) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", new Date());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
     @ExceptionHandler(BaseException.class)

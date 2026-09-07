@@ -3,6 +3,7 @@ package top.news.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,13 @@ public class SectionController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<String> create(@Valid @RequestBody SectionRequestDTO dto){
-        return ResponseEntity.ok(sectionService.createSection(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(sectionService.createSection(dto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/by-id/{sectionId}")
     public ResponseEntity<String> updateById(@PathVariable Integer sectionId,
-                                             @RequestBody SectionRequestDTO dto){
+                                             @Valid @RequestBody SectionRequestDTO dto){
         return ResponseEntity.ok(sectionService.updateSectionById(sectionId, dto));
     }
 

@@ -2,6 +2,7 @@ package top.news.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,13 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<String> create(@Valid @RequestBody CategoryRequestDTO dto){
-        return ResponseEntity.ok(categoryService.createCategory(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(dto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/by-id/{categoryId}")
     public ResponseEntity<String> updateById(@PathVariable Integer categoryId,
-                                             @RequestBody CategoryRequestDTO dto){
+                                             @Valid @RequestBody CategoryRequestDTO dto){
         return ResponseEntity.ok(categoryService.updateCategoryById(categoryId, dto));
     }
 

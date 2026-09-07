@@ -2,6 +2,7 @@ package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.entity.ArticleLikeEntity;
 import top.news.enums.LikeStatusEnum;
 import top.news.repository.ArticleLikeRepository;
@@ -18,6 +19,7 @@ public class ArticleLikeService {
     @Autowired
     private ArticleService articleService;
 
+    @Transactional(rollbackFor = Exception.class)
     public String like(String articleId) {
         check(articleId);
         Integer profileId = SpringSecurityUtil.getCurrentProfileId();
@@ -52,6 +54,7 @@ public class ArticleLikeService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String dislike(String articleId) {
         check(articleId);
         Integer profileId = SpringSecurityUtil.getCurrentProfileId();
@@ -87,7 +90,8 @@ public class ArticleLikeService {
         }
     }
 
-    private void check(String articleId){
+    @Transactional
+    public void check(String articleId){
         articleService.articleExists(articleId);
     }
 }

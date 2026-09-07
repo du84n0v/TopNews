@@ -1,8 +1,8 @@
 package top.news.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.section.SectionShortDTO;
 import top.news.entity.ArticleSectionEntity;
 import top.news.repository.ArticleSectionRepository;
@@ -15,7 +15,7 @@ public class ArticleSectionService {
     @Autowired
     private ArticleSectionRepository articleSectionRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void merge(String articleId, List<Integer> sectionIdList) {
         deleteAllByArticleId(articleId);
 
@@ -31,6 +31,7 @@ public class ArticleSectionService {
         articleSectionRepository.deleteAllByArticleId(articleId);
     }
 
+    @Transactional(readOnly = true)
     public List<SectionShortDTO> getArticleSection(String articleId) {
         List<ArticleSectionEntity> ans = articleSectionRepository.findAllByArticleId(articleId);
 

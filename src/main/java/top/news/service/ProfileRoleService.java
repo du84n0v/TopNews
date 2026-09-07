@@ -1,8 +1,8 @@
 package top.news.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.entity.ProfileRoleEntity;
 import top.news.enums.ProfileRoleEnum;
 import top.news.exception.AppBadRequestException;
@@ -16,6 +16,7 @@ public class ProfileRoleService {
     @Autowired
     private ProfileRoleRepository profileRoleRepository;
 
+    @Transactional
     public void save(Integer profileId, ProfileRoleEnum role) {
         if(profileRoleRepository.existsByProfileIdAndRole(profileId, role)){
             throw new AppBadRequestException("This role is already assigned to this profile");

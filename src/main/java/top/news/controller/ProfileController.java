@@ -1,7 +1,9 @@
 package top.news.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +19,20 @@ public class ProfileController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create")
-    public ResponseEntity<ProfileResponseDTO> create(@RequestBody ProfileRequestDTO dto){
-        return ResponseEntity.ok(profileService.save(dto));
+    public ResponseEntity<ProfileResponseDTO> create(@Valid @RequestBody ProfileRequestDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(profileService.save(dto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/update/{profileId}")
     public ResponseEntity<ProfileResponseDTO> update(@PathVariable Integer profileId,
-                                                     @RequestBody ProfileRequestDTO dto){
+                                                     @Valid @RequestBody ProfileRequestDTO dto){
         return ResponseEntity.ok(profileService.updateProfile(profileId, dto));
     }
 
     @PutMapping("/update/detail/{profileId}")
     public ResponseEntity<String> updateDetail(@PathVariable Integer profileId,
-                                                           @RequestBody ProfileDetailUpdateDTO dto){
+                                               @Valid @RequestBody ProfileDetailUpdateDTO dto){
         return ResponseEntity.ok(profileService.updateDetail(profileId, dto));
     }
 
@@ -60,7 +62,7 @@ public class ProfileController {
 
     @PutMapping("/update/password/{profileId}")
     public ResponseEntity<String> updatePassword(@PathVariable Integer profileId,
-                                                 @RequestBody ProfileUpdatePasswordDTO pDto){
+                                                 @Valid @RequestBody ProfileUpdatePasswordDTO pDto){
         return ResponseEntity.ok(profileService.updatePassword(profileId, pDto));
     }
 

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import top.news.dto.attach.AttachDTO;
 import top.news.dto.attach.AttachShortInfoDTO;
@@ -39,6 +40,7 @@ public class AttachService {
     @Value("${server.url}")
     private String attachUrl;
 
+    @Transactional(rollbackFor = Exception.class)
     public AttachDTO upload(MultipartFile file) {
         if (file.isEmpty()) {
             throw new ItemNotFoundException("File not found");

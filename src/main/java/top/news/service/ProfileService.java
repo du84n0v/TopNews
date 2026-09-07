@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.profile.*;
 import top.news.entity.ProfileEntity;
 import top.news.enums.ProfileRoleEnum;
@@ -36,6 +37,7 @@ public class ProfileService {
     @Autowired
     private AttachService attachService;
 
+    @Transactional
     public ProfileResponseDTO save(ProfileRequestDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByUsernameAndVisibleTrue(dto.getUsername());
         if(optional.isPresent()){
@@ -73,6 +75,7 @@ public class ProfileService {
         return response;
     }
 
+    @Transactional
     public String updateProfileById(Integer profileId, ProfileDetailUpdateDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
@@ -87,6 +90,7 @@ public class ProfileService {
         return "Successfully updated";
     }
 
+    @Transactional(readOnly = true)
     public PageImpl<ProfileResponseDTO> getProfileList(Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<ProfileEntity> pages = profileRepository.findAllByVisibleTrue(pageRequest);
@@ -97,6 +101,7 @@ public class ProfileService {
         return new PageImpl<>(response, pageRequest, pages.getTotalElements());
     }
 
+    @Transactional
     public String deleteByProfileId(Integer profileId) {
         if(profileRepository.findByIdAndVisibleTrue(profileId).isEmpty()){
             throw new ItemNotFoundException("ProfileEntity is not found");
@@ -106,6 +111,7 @@ public class ProfileService {
         return (result > 0 ? "Successfully deleted" : "Hmm something went wrong");
     }
 
+    @Transactional
     public ProfileResponseDTO updateProfile(Integer profileId, ProfileRequestDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
@@ -128,6 +134,7 @@ public class ProfileService {
         return toResponseDTO(profile, dto.getRoleList());
     }
 
+    @Transactional
     public String updateDetail(Integer profileId, ProfileDetailUpdateDTO dto) {
         Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
@@ -140,6 +147,7 @@ public class ProfileService {
         return "Successfully updated";
     }
 
+    @Transactional
     public String updatePassword(Integer profileId, ProfileUpdatePasswordDTO pDto) {
         Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(profileId);
         if(optional.isEmpty()){
@@ -155,6 +163,7 @@ public class ProfileService {
         return "Successfully updated";
     }
 
+    @Transactional
     public String updateProfilePhoto(String attachId) {
         Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleTrue(SpringSecurityUtil.getCurrentProfileId());
 
@@ -173,6 +182,7 @@ public class ProfileService {
         return "Successfully updated";
     }
 
+    @Transactional(readOnly = true)
     public PageImpl<ProfileResponseDTO> filter(ProfileFilterDTO dto, Integer page, Integer size) {
         Page<ProfileEntity> profiles = customProfileRepository.filter(dto, page, size);
 

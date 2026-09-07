@@ -1,12 +1,12 @@
 package top.news.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.article.*;
 import top.news.entity.ArticleEntity;
 import top.news.enums.ArticleStatusEnum;
@@ -39,6 +39,7 @@ public class ArticleService {
     @Autowired
     private AttachService attachService;
 
+    @Transactional(rollbackFor = Exception.class)
     public ArticleShortInfoDTO createArticle(ArticleRequestDTO dto) {
         ArticleEntity article = dtoToEntity(dto);
         article.setModeratorId(SpringSecurityUtil.getCurrentProfileId());
@@ -52,7 +53,7 @@ public class ArticleService {
         return entityToShortDto(article);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ArticleShortInfoDTO updateArticle(String articleId, ArticleRequestDTO dto) {
         Optional<ArticleEntity> optional = articleRepository.findByIdAndVisibleTrue(articleId);
         if(optional.isEmpty()){
@@ -80,6 +81,7 @@ public class ArticleService {
         return entityToShortDto(article);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String deleteArticleById(String articleId) {
         int effRow = articleRepository.deleteArticleById(articleId);
         if(effRow > 0){
@@ -88,6 +90,7 @@ public class ArticleService {
         throw new ItemNotFoundException("ArticleEntity not found");
     }
 
+    @Transactional
     public String changeArticleStatus(String articleId, ArticleStatusDTO dto) {
         int effRow = articleRepository.changeStatus(articleId, dto.getStatus(), SpringSecurityUtil.getCurrentProfileId(), LocalDateTime.now());
 
@@ -97,6 +100,7 @@ public class ArticleService {
         throw new ItemNotFoundException("ArticleEntity not found");
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> getLastNArticleBySectionId(Integer sectionId, int page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<ArticleShortInfoMapper> pages = articleRepository.findNArticleBySectionId(sectionId, pageRequest);
@@ -108,6 +112,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageRequest, pages.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> getLast12(List<String> ids, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ArticleShortInfoMapper> pages = articleRepository.getLast12(ids, pageable);
@@ -119,6 +124,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> getLastNArticleByCategoryId(Integer categoryId, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ArticleShortInfoMapper> pages = articleRepository.findNArticleByCategoryId(categoryId, pageable);
@@ -131,6 +137,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> getLastNArticleByRegionId(Integer regionId, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ArticleShortInfoMapper> pages = articleRepository.findNArticleByRegionId(regionId, pageable);
@@ -143,6 +150,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> getMostReadExcept(String articleId, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ArticleShortInfoMapper> pages = articleRepository.find4MostReadExcept(articleId, pageable);
@@ -155,6 +163,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
     }
 
+    @Transactional
     public Integer increaseViewCountByArticleId(String articleId) {
         int effRow =  articleRepository.increaseViewCountById(articleId);
         if(effRow != 0){
@@ -165,6 +174,7 @@ public class ArticleService {
         }
     }
 
+    @Transactional
     public Integer increaseShareCountByArticleId(String articleId) {
         int effRow =  articleRepository.increaseShareCountById(articleId);
         if(effRow != 0){
@@ -175,6 +185,7 @@ public class ArticleService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> filterForEveryOne(ArticleFilterDTO filterDto, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         filterDto.setStatus(ArticleStatusEnum.PUBLISHED);
@@ -187,6 +198,7 @@ public class ArticleService {
         return new PageImpl<>(response, pageable, pages.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Page<ArticleShortInfoDTO> filterForModerator(ArticleFilterDTO dto, Integer page, Integer size) {
         dto.setModeratorId(SpringSecurityUtil.getCurrentProfileId());
         Pageable pageable = PageRequest.of(page, size);
@@ -197,6 +209,19 @@ public class ArticleService {
                 .toList();
 
         return new PageImpl<>(response, pageable, pages.getTotalElements());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleShortInfoDTO> filterForPublisher(ArticleFilterDTO dto, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Object[]> pages = customRepository.filter(dto, page, size);
+
+        List<ArticleShortInfoDTO> response = pages.stream()
+                .map(this::objectToShortDto)
+                .toList();
+
+        return new PageImpl<>(response, pageable, pages.getTotalElements());
+
     }
 
     private ArticleShortInfoDTO entityToShortDto(ArticleEntity article) {
@@ -218,7 +243,6 @@ public class ArticleService {
         if(dto.getImageId() != null) article.setImageId(dto.getImageId());
         if(dto.getRegionId() != null) article.setRegionId(dto.getRegionId());
         article.setVisible(Boolean.TRUE);
-        article.setCreatedDate(LocalDateTime.now());
         article.setReadTime(0);
         article.setSharedCount(0);
         article.setStatus(ArticleStatusEnum.NOT_PUBLISHED);
@@ -250,23 +274,13 @@ public class ArticleService {
         return dto;
     }
 
-    public Page<ArticleShortInfoDTO> filterForPublisher(ArticleFilterDTO dto, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Object[]> pages = customRepository.filter(dto, page, size);
-
-        List<ArticleShortInfoDTO> response = pages.stream()
-                .map(this::objectToShortDto)
-                .toList();
-
-        return new PageImpl<>(response, pageable, pages.getTotalElements());
-
-    }
-
+    @Transactional(readOnly = true)
     public void articleExists(String articleId) {
         articleRepository.findByIdAndVisibleTrue(articleId)
                 .orElseThrow(() -> new ItemNotFoundException("Article not found"));
     }
 
+    @Transactional(readOnly = true)
     public ArticleFullInfoDTO getArticleById(String articleId) {
         Optional<ArticleEntity> optional = articleRepository.findByIdAndVisibleTrue(articleId);
         if(optional.isEmpty()){

@@ -7,12 +7,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
+@SQLRestriction("visible = true")
 @Table(name = "attach")
 public class AttachEntity {
     @Id
