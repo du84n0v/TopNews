@@ -34,8 +34,16 @@ public class CustomUserDetails  implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (roles == null || roles.isEmpty()) {
+            return List.of();
+        }
+
         return roles.stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> {
+                    // Agar rolda "ROLE_" prefiksi bo'lmasa, uni qo'shib beradi
+                    String roleName = role.startsWith("ROLE_") ? role : "ROLE_" + role;
+                    return new SimpleGrantedAuthority(roleName);
+                })
                 .toList();
     }
 

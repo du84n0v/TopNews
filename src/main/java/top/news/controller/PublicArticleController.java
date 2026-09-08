@@ -15,36 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/article")
 @CrossOrigin(origins = "*")
-public class ArticleController {
+public class PublicArticleController {
 
     @Autowired
     private ArticleService articleService;
-
-    @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
-    @PostMapping("/create")
-    public ResponseEntity<ArticleShortInfoDTO> create(@Valid @RequestBody ArticleRequestDTO dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(articleService.createArticle(dto));
-    }
-
-    @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
-    @PutMapping("/update/{articleId}")
-    public ResponseEntity<ArticleShortInfoDTO> update(@PathVariable String articleId,
-                                                      @Valid @RequestBody ArticleRequestDTO dto){
-        return ResponseEntity.ok(articleService.updateArticle(articleId, dto));
-    }
-
-    @PreAuthorize("hasAnyRole('MODERATOR', 'ADMIN')")
-    @PutMapping("/delete/{articleId}")
-    public ResponseEntity<String> deleteById(@PathVariable String articleId){
-        return ResponseEntity.ok(articleService.deleteArticleById(articleId));
-    }
-
-    @PreAuthorize("hasAnyRole('PUBLISHER', 'ADMIN')")
-    @PutMapping("/change-status/{articleId}")
-    public ResponseEntity<String> changeStatus(@PathVariable String articleId,
-                                               @Valid @RequestBody ArticleStatusDTO dto){
-        return ResponseEntity.ok(articleService.changeArticleStatus(articleId, dto));
-    }
 
     @GetMapping("/get-by-id/{articleId}")
     public ResponseEntity<ArticleFullInfoDTO> getById(@PathVariable String articleId) {
@@ -101,21 +75,5 @@ public class ArticleController {
                                                                        @RequestParam(name = "size", defaultValue = "5") Integer size,
                                                                        @RequestBody ArticleFilterDTO filterDto){
         return ResponseEntity.ok(articleService.filterForEveryOne(filterDto, page-1, size));
-    }
-
-    @PreAuthorize("hasRole('MODERATOR')")
-    @PostMapping("/moderator/filter")
-    public ResponseEntity<Page<ArticleShortInfoDTO>> filterForModerator(@RequestParam(name = "page", defaultValue = "1") Integer page,
-                                                                        @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                                                        @RequestBody ArticleFilterDTO dto){
-        return ResponseEntity.ok(articleService.filterForModerator(dto, page-1, size));
-    }
-
-    @PreAuthorize("hasRole('PUBLISHER')")
-    @PostMapping("/publisher/filter")
-    public ResponseEntity<Page<ArticleShortInfoDTO>> filterForPublisher(@RequestParam(name = "page", defaultValue = "1") Integer page,
-                                                                        @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                                                        @RequestBody ArticleFilterDTO dto){
-        return ResponseEntity.ok(articleService.filterForPublisher(dto, page-1, size));
     }
 }

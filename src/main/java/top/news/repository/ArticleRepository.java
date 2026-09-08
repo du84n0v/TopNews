@@ -92,4 +92,11 @@ public interface ArticleRepository extends CrudRepository<ArticleEntity, String>
             " a.publishedDate = ?4" +
             " WHERE a.id = ?1")
     int changeStatus(String articleId, ArticleStatusEnum status, Integer publisherId, LocalDateTime publishedDate);
+
+    @Query("SELECT a.id AS id, a.title AS title, a.description AS description, a.imageId AS imageId, a.publishedDate AS publishedDat " +
+            " FROM ArticleEntity a " +
+            " WHERE a.moderatorId = ?1 " +
+            " AND a.visible=true "
+    )
+    Page<ArticleShortInfoMapper> getOwnArticles(Integer moderatorId, Pageable pageable);
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface ProfileRepository extends CrudRepository<ProfileEntity, Integer> {
 
+    @Query("SELECT p FROM ProfileEntity p LEFT JOIN FETCH p.roles WHERE p.username = :username")
     Optional<ProfileEntity> findByUsernameAndVisibleTrue(String username);
 
     Optional<ProfileEntity> findByIdAndVisibleTrue(Integer profileId);

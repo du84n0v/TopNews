@@ -1,10 +1,7 @@
 package top.news.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.news.dto.article.*;
@@ -304,5 +301,14 @@ public class ArticleService {
         response.setViewCount(article.getViewCount());
 
         return response;
+    }
+
+    @Transactional
+    public Page<ArticleShortInfoDTO> getOwnArticles(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+        Integer moderatorId = SpringSecurityUtil.getCurrentProfileId();
+        Page<ArticleShortInfoMapper> pages = articleRepository.getOwnArticles(moderatorId, pageable);
+
+        return pages.map(this::mapperToShortDto);
     }
 }
